@@ -1,0 +1,80 @@
+# Dependencies
+/node_modules
+/vendor
+
+# Environment & Credentials
+.env
+.env.backup
+.env.production
+.env.*.local
+Homestead.json
+Homestead.yaml
+
+# Build & Compilation
+/public/hot
+/public/storage
+/public/css
+/public/js
+/public/fonts
+/public/mix-manifest.json
+mix-manifest.json
+
+# Storage & Logs
+/storage/*.key
+/storage/app/*
+!/storage/app/public/
+!/storage/app/.gitignore
+/storage/debugbar/*
+!/storage/debugbar/.gitignore
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+/storage/framework/cache/data/*
+!/storage/framework/cache/data/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/testing/*
+!/storage/framework/testing/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
+
+# Testing & Coverage
+/coverage
+coverage.xml
+.phpunit.result.cache
+.phpunit.cache
+
+# IDE & Editor Files
+.DS_Store
+Thumbs.db
+.idea
+/.vscode
+*.sublime-project
+*.sublime-workspace
+.project
+.fleet
+.agents
+
+# Helper & Meta Files
+.php_cs.cache
+.phpstorm.meta.php
+_ide_helper.php
+_ide_helper_models.php
+
+# Logs & Debugging
+*.log
+error_log
+output.txt
+npm-debug.log
+yarn-error.log
+
+# Archives & Large Backups
+*.zip
+*.tar.gz
+*.rar
+*.7z
+*.sql
+*.sqlite
+composer.phar
+docker-compose.override.yml
