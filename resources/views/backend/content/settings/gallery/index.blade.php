@@ -1,249 +1,165 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Mixed Settings')
-
-@php
-    $required = html()
-        ->span('*')
-        ->class('text-danger');
-    $demoImg = 'img/backend/front-logo.png';
-@endphp
+@section('title', 'Gallery Settings')
 
 @section('content')
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <style>
-        .modal-confirm {
-            color: #636363;
-            width: 400px;
-        }
-
-        .modal-confirm .modal-content {
-            padding: 20px;
-            border-radius: 5px;
-            border: none;
-            text-align: center;
-            font-size: 14px;
-        }
-
-        .modal-confirm .modal-header {
-            border-bottom: none;
-            position: relative;
-        }
-
-        .modal-confirm h4 {
-            text-align: center;
-            font-size: 26px;
-            margin: 30px 0 -10px;
-        }
-
-        .modal-confirm .close {
-            position: absolute;
-            top: -5px;
-            right: -2px;
-        }
-
-        .modal-confirm .modal-body {
-            color: #999;
-        }
-
-        .modal-confirm .modal-footer {
-            border: none;
-            text-align: center;
-            border-radius: 5px;
-            font-size: 13px;
-            padding: 10px 15px 25px;
-        }
-
-        .modal-confirm .modal-footer a {
-            color: #999;
-        }
-
-        .modal-confirm .icon-box {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto;
-            border-radius: 50%;
-            z-index: 9;
-            text-align: center;
-            border: 3px solid #f15e5e;
-        }
-
-        .modal-confirm .icon-box i {
-            color: #f15e5e;
-            font-size: 46px;
-            display: inline-block;
-            margin-top: 13px;
-        }
-
-        .modal-confirm .btn,
-        .modal-confirm .btn:active {
-            color: #fff;
-            border-radius: 4px;
-            background: #60c7c1;
-            text-decoration: none;
-            transition: all 0.4s;
-            line-height: normal;
-            min-width: 120px;
-            border: none;
-            min-height: 40px;
-            border-radius: 3px;
-            margin: 0 5px;
-        }
-
-        .modal-confirm .btn-secondary {
-            background: #c1c1c1;
-        }
-
-        .modal-confirm .btn-secondary:hover,
-        .modal-confirm .btn-secondary:focus {
-            background: #a8a8a8;
-        }
-
-        .modal-confirm .btn-danger {
-            background: #f15e5e;
-        }
-
-        .modal-confirm .btn-danger:hover,
-        .modal-confirm .btn-danger:focus {
-            background: #ee3535;
-        }
-
-        .trigger-btn {
-            display: inline-block;
-            margin: 100px auto;
-        }
-    </style>
-    @php
-        $multis = DB::table('galleries')
-            ->where('is_active', 1)
-            ->orwhere('is_active', 0)
-            ->get();
-    @endphp
-
     <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header">
-
+        <!-- Create Gallery Item Card -->
+        <div class="col-lg-12 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-white"><i class="fas fa-images me-2"></i> Add Gallery Item (Galleries Table)</h5>
                 </div>
                 <div class="card-body">
-                    <form class="form-horizontal" action="{{ route('admin.setting.gallery.store') }}"
-                        enctype="multipart/form-data" method="POST">
+                    <form class="form-horizontal" action="{{ route('admin.setting.gallery.store') }}" enctype="multipart/form-data" method="POST">
                         @csrf
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label>Image</label>
-                                    <input type="file" name="image" class="form-control">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-bold">Gallery Title</label>
+                                    <input type="text" name="title" class="form-control" placeholder="Enter Title (e.g. Traditional Thai Massage)" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-bold">Gallery Image</label>
+                                    <input type="file" name="image" class="form-control" accept="image/*" required>
+                                    <small class="text-muted">Recommended aspect ratio 4:3 (e.g. 800x600px)</small>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="table-responsive">
-                            <!-- <table class="table table-bordered" id="dynamic_field">
-                                                                                                                                                                                    <tr>
-                                                                                                                                                                                        <td><input type="file" name="multiimage[]" placeholder="multiimage" class="form-control name_list" /></td>
-                                                                                                                                                                                        <td><input type="text" name="title[]" placeholder="title" class="form-control name_list" /></td>
-                                                                                                                                                                                        <td><textarea class="form-control" col="10" row="3" name="description[]"></textarea></td>
-                                                                                                                                                                                        <td><button type="button" name="add" id="add" class="btn btn-success">Add More</button></td>
-                                                                                                                                                                                    </tr>
-                                                                                                                                                                                </table>   -->
-                            <button type="submit" class="btn btn-info">Submit</button>
-                            <!--<input value="Submit" />  -->
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="fas fa-plus-circle me-1"></i> Save to Galleries
+                            </button>
                         </div>
-
-
                     </form>
-
                 </div>
             </div>
         </div>
 
+        <!-- Galleries List Card -->
+        <div class="col-lg-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                    <h5 class="mb-0 text-dark fw-bold"><i class="fas fa-list me-2 text-primary"></i> Galleries List (galleries table)</h5>
+                    <span class="badge bg-primary rounded-pill">{{ count($multis) }} Items</span>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="example" class="table table-bordered table-hover align-middle" style="width:100%">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 60px;">#</th>
+                                    <th style="width: 140px;">Image</th>
+                                    <th>Title</th>
+                                    <th style="width: 120px;">Status</th>
+                                    <th style="width: 160px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($multis as $key => $multi)
+                                    <tr>
+                                        <td>{{ $key + 1 }}</td>
+                                        <td>
+                                            @if($multi->image && file_exists(public_path('setting/banner/' . $multi->image)))
+                                                <img src="{{ asset('/setting/banner/' . $multi->image) }}" 
+                                                     alt="{{ $multi->title }}" 
+                                                     style="height: 70px; width: 100px; object-fit: cover; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                                            @else
+                                                <img src="{{ asset('/setting/banner/' . $multi->image) }}" 
+                                                     alt="{{ $multi->title }}" 
+                                                     style="height: 70px; width: 100px; object-fit: cover; border-radius: 6px;"
+                                                     onerror="this.src='{{ asset('frontend_assets/img/slider/slider-1.jpg') }}'">
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <strong class="text-dark">{{ $multi->title ?? 'N/A' }}</strong>
+                                        </td>
+                                        <td>
+                                            @if ($multi->is_active == 1)
+                                                <span class="badge bg-success text-white px-2 py-1"><i class="fas fa-check-circle me-1"></i> Active</span>
+                                            @else
+                                                <span class="badge bg-danger text-white px-2 py-1"><i class="fas fa-times-circle me-1"></i> Inactive</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <button type="button" 
+                                                    class="btn btn-sm btn-primary edit-gallery-btn" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#editModal{{ $multi->id }}"
+                                                    data-toggle="modal" 
+                                                    data-target="#editModal{{ $multi->id }}">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </button>
+                                            <a href="{{ route('admin.setting.gallery.delete', $multi->id) }}" 
+                                               class="btn btn-sm btn-danger"
+                                               onclick="return confirm('Are you sure you want to delete this gallery item?')">
+                                                <i class="fas fa-trash-alt"></i> Delete
+                                            </a>
+                                        </td>
+                                    </tr>
 
+                                    <!-- Edit Modal for Item {{ $multi->id }} -->
+                                    <div class="modal fade" id="editModal{{ $multi->id }}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel{{ $multi->id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <form action="{{ route('admin.setting.gallery.update') }}" enctype="multipart/form-data" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="gallery_id" value="{{ $multi->id }}">
+                                                    <input type="hidden" name="oldimage" value="{{ $multi->image }}">
 
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="editModalLabel{{ $multi->id }}">Edit Gallery #{{ $multi->id }}</h5>
+                                                        <button type="button" class="close btn-close" data-dismiss="modal" data-bs-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="mb-3">
+                                                            <label class="form-label fw-bold">Title</label>
+                                                            <input type="text" name="title" value="{{ $multi->title }}" class="form-control" required>
+                                                        </div>
 
+                                                        <div class="mb-3">
+                                                            <label class="form-label fw-bold">Current Image</label>
+                                                            <div class="mb-2">
+                                                                <img src="{{ asset('/setting/banner/' . $multi->image) }}" style="height: 90px; width: 130px; object-fit: cover; border-radius: 6px;">
+                                                            </div>
+                                                            <label class="form-label fw-bold">Change Image (Optional)</label>
+                                                            <input type="file" name="image" class="form-control" accept="image/*">
+                                                        </div>
 
-    </div>
-
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="card-header">
-                <table id="example" class="table table-striped" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Active/Deactive</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($multis as $multi)
-                            <tr>
-                                <td><img src="{{ asset('/setting/banner/' . $multi->image) }}" style="height: 100px">
-                                </td>
-
-                                <td>
-                                    @if ($multi->is_active == 1)
-                                        <button class="btn btn-sm btn-primary">Active</button>
-                                    @elseif($multi->is_active == 0)
-                                        <button class="btn btn-sm btn-danger">Deactive</button>
-                                    @endif
-                                </td>
-
-
-                                <td>
-                                    <a href="/admin/setting/gallery/edit/{{ $multi->id }}"
-                                        class="btn btn-primary btn-sm editProduct">Edit</a>
-
-                                </td>
-                            </tr>
-                        @endforeach
-
-                    </tbody>
-
-                </table>
+                                                        <div class="mb-3">
+                                                            <label class="form-label fw-bold">Status</label>
+                                                            <select class="form-control" name="is_active">
+                                                                <option value="1" @if ($multi->is_active == 1) selected @endif>Active</option>
+                                                                <option value="0" @if ($multi->is_active == 0) selected @endif>Inactive</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Update Gallery</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center py-4 text-muted">
+                                            <i class="fas fa-images fa-2x mb-2 d-block"></i>
+                                            No gallery images found in galleries table. Use the form above to add some!
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-    <script>
-        tinymce.init({
-            selector: 'textarea#default'
-        });
-    </script>
-
-    <script type="text/javascript">
-        $(document).ready(function() {
-            var postURL = "<?php echo url('addmore'); ?>";
-            var i = 1;
-
-
-            $('#add').click(function() {
-                i++;
-                $('#dynamic_field').append('<tr id="row' + i +
-                    '" class="dynamic-added"><td><input type="file" name="multiimage[]" placeholder="multiimage" class="form-control name_list" /></td><td><input type="text" name="title[]" placeholder="Title" class="form-control name_list" /></td><td><textarea class="form-control" col="10" row="3" name="description[]"></textarea></td><button type="button" name="remove" id="' +
-                    i + '" class="btn btn-danger btn_remove">X</button></td></tr>');
-            });
-
-
-            $(document).on('click', '.btn_remove', function() {
-                var button_id = $(this).attr("id");
-                $('#row' + button_id + '').remove();
-            });
-
-
-        });
-    </script>
-
-
-
 @endsection
-
-
-
-
-@push('after-scripts')
-    {{ script('assets/js/jscolor.js') }}
-@endpush
