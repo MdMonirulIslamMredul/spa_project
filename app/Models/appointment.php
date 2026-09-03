@@ -9,6 +9,8 @@ class appointment extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     // relation to service
     function rel_to_service(){
         return $this->belongsTo(Service::class, 'appointment_service');
