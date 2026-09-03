@@ -18,6 +18,10 @@ Homestead.yaml
 /public/fonts
 /public/mix-manifest.json
 mix-manifest.json
+/public/setting/banner/
+/public/backend_img/blogs/
+/public/backend_img/secrets/
+/public/frontend_assets/img/
 
 # Storage & Logs
 /storage/*.key
