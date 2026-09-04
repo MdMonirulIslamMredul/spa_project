@@ -125,62 +125,138 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-
+                    <h4>Edit Service</h4>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('admin.setting.service.update') }}" enctype="multipart/form-data" method="POST">
                         @csrf
+                        <input type="hidden" name="notice_id" value="{{ $notice->id ?? '' }}">
+
                         <div class="form-group">
                             <label>Banner Title</label>
-                            <input type="text" name="ban_title" value="{{ $notice->ban_title }}" class="form-control" placeholder="Title">
-
+                            <input type="text" name="ban_title" value="{{ $notice->ban_title ?? '' }}" class="form-control" placeholder="Banner Title">
                         </div>
+
                         <div class="form-group">
                             <label>Banner Image</label>
-                            <input type="file" name="ban_img" value="{{ $notice->ban_img }}" class="form-control">
+                            @if (!empty($notice->ban_img))
+                                <div class="mb-2">
+                                    <img src="{{ asset('setting/banner/' . $notice->ban_img) }}" alt="Banner" style="max-height: 80px; border-radius: 4px;">
+                                </div>
+                            @endif
+                            <input type="file" name="ban_img" class="form-control">
                         </div>
+
                         <div class="form-group">
                             <label>Title</label>
-                            <input type="text" name="title" value="{{ $notice->title }}" class="form-control">
+                            <input type="text" name="title" value="{{ $notice->title ?? '' }}" class="form-control" placeholder="Title">
                         </div>
 
                         <div class="form-group">
                             <label>Description</label>
-                            <textarea type="text" rows="3" name="description" value="{{ $notice->description }}" class="form-control"></textarea>
+                            <textarea rows="3" name="description" class="form-control" placeholder="Description">{{ $notice->description ?? '' }}</textarea>
+                        </div>
+
+                        <div class="row">
+                            <!-- Service Image 1 (Main) -->
+                            <div class="col-md-6 col-lg-3">
+                                <div class="form-group border p-3 rounded bg-light">
+                                    <label class="font-weight-bold">Service Image 1 (Main)</label>
+                                    @if (!empty($notice->service_image))
+                                        <div class="mb-2">
+                                            <img src="{{ asset('setting/banner/' . $notice->service_image) }}" alt="Service Image 1" style="max-height: 90px; width: 100%; object-fit: cover; border-radius: 4px; border: 1px solid #ccc;">
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" name="remove_image" value="1" id="remove_image">
+                                            <label class="form-check-label text-danger small" for="remove_image">Remove Image</label>
+                                        </div>
+                                    @endif
+                                    <input type="file" name="image" class="form-control">
+                                    <input type="hidden" name="oldimage" value="{{ $notice->service_image ?? '' }}">
+                                </div>
+                            </div>
+
+                            <!-- Service Image 2 -->
+                            <div class="col-md-6 col-lg-3">
+                                <div class="form-group border p-3 rounded bg-light">
+                                    <label class="font-weight-bold">Service Image 2</label>
+                                    @if (!empty($notice->service_image_2))
+                                        <div class="mb-2">
+                                            <img src="{{ asset('setting/banner/' . $notice->service_image_2) }}" alt="Service Image 2" style="max-height: 90px; width: 100%; object-fit: cover; border-radius: 4px; border: 1px solid #ccc;">
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" name="remove_image_2" value="1" id="remove_image_2">
+                                            <label class="form-check-label text-danger small" for="remove_image_2">Remove Image</label>
+                                        </div>
+                                    @endif
+                                    <input type="file" name="image_2" class="form-control">
+                                    <input type="hidden" name="oldimage_2" value="{{ $notice->service_image_2 ?? '' }}">
+                                </div>
+                            </div>
+
+                            <!-- Service Image 3 -->
+                            <div class="col-md-6 col-lg-3">
+                                <div class="form-group border p-3 rounded bg-light">
+                                    <label class="font-weight-bold">Service Image 3</label>
+                                    @if (!empty($notice->service_image_3))
+                                        <div class="mb-2">
+                                            <img src="{{ asset('setting/banner/' . $notice->service_image_3) }}" alt="Service Image 3" style="max-height: 90px; width: 100%; object-fit: cover; border-radius: 4px; border: 1px solid #ccc;">
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" name="remove_image_3" value="1" id="remove_image_3">
+                                            <label class="form-check-label text-danger small" for="remove_image_3">Remove Image</label>
+                                        </div>
+                                    @endif
+                                    <input type="file" name="image_3" class="form-control">
+                                    <input type="hidden" name="oldimage_3" value="{{ $notice->service_image_3 ?? '' }}">
+                                </div>
+                            </div>
+
+                            <!-- Service Image 4 -->
+                            <div class="col-md-6 col-lg-3">
+                                <div class="form-group border p-3 rounded bg-light">
+                                    <label class="font-weight-bold">Service Image 4</label>
+                                    @if (!empty($notice->service_image_4))
+                                        <div class="mb-2">
+                                            <img src="{{ asset('setting/banner/' . $notice->service_image_4) }}" alt="Service Image 4" style="max-height: 90px; width: 100%; object-fit: cover; border-radius: 4px; border: 1px solid #ccc;">
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" name="remove_image_4" value="1" id="remove_image_4">
+                                            <label class="form-check-label text-danger small" for="remove_image_4">Remove Image</label>
+                                        </div>
+                                    @endif
+                                    <input type="file" name="image_4" class="form-control">
+                                    <input type="hidden" name="oldimage_4" value="{{ $notice->service_image_4 ?? '' }}">
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-group">
-                            <label>Image</label>
-                            <input type="file" name="image" class="form-control">
-                            <input type="hidden" name="oldimage" value="{{ $notice->service_image }}" class="form-control">
-                        </div>
-                        <div class="form-group">
                             <label>Service Title</label>
-                            <input type="text" name="service_title" value="{{ $notice->service_title }}"
-                                class="form-control">
-                            <input type="hidden" name="notice_id" value="{{ $notice->id }}" class="form-control">
+                            <input type="text" name="service_title" value="{{ $notice->service_title ?? $notice->title ?? '' }}" class="form-control" placeholder="Service Title">
                         </div>
+
                         <div class="form-group">
                             <label>Service Details</label>
-                            <textarea type="text" name="service_details" rows="3" value="{{ $notice->service_details }}"
-                                class="form-control"></textarea>
+                            <textarea name="service_details" rows="4" class="form-control" placeholder="Service Details">{{ $notice->service_details ?? '' }}</textarea>
                         </div>
 
                         <div class="form-group">
                             <label>Add to Homepage</label>
                             <select class="form-control" name="homepage">
-                                <option value="1" @if ($notice->homepage == 1) selected @endif>Yes</option>
-                                <option value="0" @if ($notice->homepage == 0) selected @endif>No</option>
+                                <option value="1" @if (($notice->homepage ?? 0) == 1) selected @endif>Yes</option>
+                                <option value="0" @if (($notice->homepage ?? 0) == 0) selected @endif>No</option>
                             </select>
                         </div>
 
                         <div class="form-group">
                             <label>Active/Deactive</label>
                             <select class="form-control" name="is_active">
-                                <option value="1" @if ($notice->is_active == 1) selected @endif>Active</option>
-                                <option value="0" @if ($notice->is_active == 0) selected @endif>Deactive</option>
+                                <option value="1" @if (($notice->is_active ?? 1) == 1) selected @endif>Active</option>
+                                <option value="0" @if (($notice->is_active ?? 1) == 0) selected @endif>Deactive</option>
                             </select>
                         </div>
+
                         <button type="submit" class="btn btn-info">Update</button>
                     </form>
                 </div>

@@ -151,9 +151,31 @@ $multis = DB::table('services')
                         <textarea type="text" rows="3" name="description[]" class="form-control" placeholder="Description"></textarea>
                     </div>
 
-                    <div class="form-group">
-                        <label>Service Image</label>
-                        <input type="file" name="image[]" class="form-control">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="form-group">
+                                <label>Service Image 1 (Main)</label>
+                                <input type="file" name="image[]" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="form-group">
+                                <label>Service Image 2</label>
+                                <input type="file" name="image_2[]" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="form-group">
+                                <label>Service Image 3</label>
+                                <input type="file" name="image_3[]" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="form-group">
+                                <label>Service Image 4</label>
+                                <input type="file" name="image_4[]" class="form-control">
+                            </div>
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -193,7 +215,7 @@ $multis = DB::table('services')
                     <tr>
                         <th>Banner name</th>
                         <th>Banner Image</th>
-                        <th>Image</th>
+                        <th>Images</th>
                         <th>Title</th>
                         <th>Details</th>
                         <th>Active/Deactive</th>
@@ -204,8 +226,32 @@ $multis = DB::table('services')
                     @foreach ($multis as $multi)
                     <tr>
                         <td>{{ $multi->ban_title ?? null }}</td>
-                        <td><img src="{{ asset('/setting/banner/' . $multi->ban_img) }}" style="height: 100px"></td>
-                        <td><img src="{{ asset('/setting/banner/' . $multi->service_image) }}" style="height: 100px"></td>
+                        <td>
+                            @if(!empty($multi->ban_img))
+                                <img src="{{ asset('/setting/banner/' . $multi->ban_img) }}" style="height: 70px; border-radius: 4px;">
+                            @else
+                                <span class="text-muted small">No Banner</span>
+                            @endif
+                        </td>
+                        <td>
+                            <div style="display: flex; flex-wrap: wrap; gap: 4px; max-width: 160px;">
+                                @if(!empty($multi->service_image))
+                                    <img src="{{ asset('/setting/banner/' . $multi->service_image) }}" style="height: 50px; width: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;" title="Image 1 (Main)">
+                                @endif
+                                @if(!empty($multi->service_image_2))
+                                    <img src="{{ asset('/setting/banner/' . $multi->service_image_2) }}" style="height: 50px; width: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;" title="Image 2">
+                                @endif
+                                @if(!empty($multi->service_image_3))
+                                    <img src="{{ asset('/setting/banner/' . $multi->service_image_3) }}" style="height: 50px; width: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;" title="Image 3">
+                                @endif
+                                @if(!empty($multi->service_image_4))
+                                    <img src="{{ asset('/setting/banner/' . $multi->service_image_4) }}" style="height: 50px; width: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;" title="Image 4">
+                                @endif
+                                @if(empty($multi->service_image) && empty($multi->service_image_2) && empty($multi->service_image_3) && empty($multi->service_image_4))
+                                    <span class="text-muted small">No Image</span>
+                                @endif
+                            </div>
+                        </td>
                         <td>{{ $multi->service_title ?? null }}</td>
                         <td>{{ $multi->service_details ?? null }}</td>
 
