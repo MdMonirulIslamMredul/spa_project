@@ -33,9 +33,28 @@
                     @if($blog)
                         <article class="spa-article">
                             @if($blog->blog_img)
-                                <div class="mb-4 rounded-4 overflow-hidden shadow-sm">
-                                    <img src="{{ asset('backend_img/blogs/' . $blog->blog_img) }}" alt="{{ $blog->blog_title }}" class="w-100 object-fit-cover" style="max-height: 480px;">
+                                <div class="mb-3 rounded-4 overflow-hidden shadow-sm">
+                                    <img id="main-blog-img" src="{{ asset('backend_img/blogs/' . $blog->blog_img) }}" alt="{{ $blog->blog_title }}" class="w-100 object-fit-cover" style="max-height: 480px;">
                                 </div>
+                                @php
+                                    $blog_gallery = array_filter([
+                                        $blog->blog_img,
+                                        $blog->blog_img_2 ?? null,
+                                        $blog->blog_img_3 ?? null,
+                                        $blog->blog_img_4 ?? null,
+                                    ]);
+                                @endphp
+                                @if(count($blog_gallery) > 1)
+                                    <div class="d-flex gap-2 mb-4 overflow-auto pb-1" id="blog-gallery-thumbs">
+                                        @foreach($blog_gallery as $bIdx => $bImg)
+                                            <img src="{{ asset('backend_img/blogs/' . $bImg) }}" 
+                                                 alt="{{ $blog->blog_title }} {{ $bIdx + 1 }}" 
+                                                 class="spa-gallery-thumb rounded-3" 
+                                                 style="width: 90px; height: 65px; object-fit: cover; cursor: pointer; transition: all 0.25s ease; opacity: {{ $bIdx === 0 ? '1' : '0.6' }}; border: 2px solid {{ $bIdx === 0 ? '#1b4d3e' : '#e2e8f0' }};"
+                                                 onclick="document.getElementById('main-blog-img').src = this.src; document.querySelectorAll('.spa-gallery-thumb').forEach(el => { el.style.opacity = '0.6'; el.style.borderColor = '#e2e8f0'; }); this.style.opacity = '1'; this.style.borderColor = '#1b4d3e';">
+                                        @endforeach
+                                    </div>
+                                @endif
                             @endif
 
                             <div class="d-flex align-items-center gap-3 text-muted mb-4 pb-3 border-bottom">
