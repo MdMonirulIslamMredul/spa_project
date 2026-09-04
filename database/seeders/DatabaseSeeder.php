@@ -27,6 +27,8 @@ class DatabaseSeeder extends Seeder
 
     $this->call(AuthSeeder::class);
     $this->call(AnnouncementSeeder::class);
+    $this->call(VideoSeeder::class);
+    $this->call(BlogSeeder::class);
 
     Model::reguard();
   }
