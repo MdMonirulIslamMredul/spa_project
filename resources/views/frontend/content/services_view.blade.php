@@ -50,8 +50,27 @@
                             <!-- Featured Image (Smooth Rounded Container) -->
                             @if($service->service_image)
                                 <div class="spa-service-main-image">
-                                    <img src="{{ asset('setting/banner/' . $service->service_image) }}" alt="{{ $service_title }}">
+                                    <img id="main-service-img" src="{{ asset('setting/banner/' . $service->service_image) }}" alt="{{ $service_title }}">
                                 </div>
+                                @php
+                                    $gallery_images = array_filter([
+                                        $service->service_image,
+                                        $service->service_image_2 ?? null,
+                                        $service->service_image_3 ?? null,
+                                        $service->service_image_4 ?? null,
+                                    ]);
+                                @endphp
+                                @if(count($gallery_images) > 1)
+                                    <div class="d-flex gap-2 mt-3 mb-2 overflow-auto pb-1" id="service-gallery-thumbs">
+                                        @foreach($gallery_images as $gIdx => $gImg)
+                                            <img src="{{ asset('setting/banner/' . $gImg) }}" 
+                                                 alt="{{ $service_title }} {{ $gIdx + 1 }}" 
+                                                 class="spa-gallery-thumb rounded-3" 
+                                                 style="width: 90px; height: 65px; object-fit: cover; cursor: pointer; transition: all 0.25s ease; opacity: {{ $gIdx === 0 ? '1' : '0.6' }}; border: 2px solid {{ $gIdx === 0 ? '#1b4d3e' : '#e2e8f0' }};"
+                                                 onclick="document.getElementById('main-service-img').src = this.src; document.querySelectorAll('.spa-gallery-thumb').forEach(el => { el.style.opacity = '0.6'; el.style.borderColor = '#e2e8f0'; }); this.style.opacity = '1'; this.style.borderColor = '#1b4d3e';">
+                                        @endforeach
+                                    </div>
+                                @endif
                             @endif
 
                             <!-- Meta Attributes Bar -->
