@@ -161,6 +161,7 @@ public function contact()
             'email'=>$request->email,
             'number'=>$request->number,
             'message'=>$request->message,
+            'is_connect'=>0,
             'created_at'=>Carbon::now(),
         ]);
         return back()->withFlashSuccess('Appointment Sent Successfully');
