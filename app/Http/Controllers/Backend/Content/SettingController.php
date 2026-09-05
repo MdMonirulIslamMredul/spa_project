@@ -15,6 +15,7 @@ use App\Models\Activity;
 use App\Models\appointment;
 use App\Models\BlogModel;
 use App\Models\contactBanner;
+use App\Models\contactUs;
 use App\Models\Donate;
 use App\Models\Notice;
 use App\Models\Slider;
@@ -750,20 +751,56 @@ class SettingController extends Controller
   }
   public function servicestore(Request $request)
   {
-
-    foreach ($request->title  as $key => $title) {
-      if ($request->image != null) {
-        $newImageName = time() . '.' . $request->image[$key]->extension();
-        $image = $request->image[$key]->move(public_path('setting/banner'), $newImageName);
+    foreach ($request->title as $key => $title) {
+      $newImageName = null;
+      if ($request->hasFile('image')) {
+        $img = is_array($request->file('image')) ? ($request->file('image')[$key] ?? null) : $request->file('image');
+        if ($img) {
+          $newImageName = time() . '_1_' . rand(1000, 9999) . '.' . $img->extension();
+          $img->move(public_path('setting/banner'), $newImageName);
+        }
       }
-      if($request->ban_img != null){
+
+      $newImageName2 = null;
+      if ($request->hasFile('image_2')) {
+        $img2 = is_array($request->file('image_2')) ? ($request->file('image_2')[$key] ?? null) : $request->file('image_2');
+        if ($img2) {
+          $newImageName2 = time() . '_2_' . rand(1000, 9999) . '.' . $img2->extension();
+          $img2->move(public_path('setting/banner'), $newImageName2);
+        }
+      }
+
+      $newImageName3 = null;
+      if ($request->hasFile('image_3')) {
+        $img3 = is_array($request->file('image_3')) ? ($request->file('image_3')[$key] ?? null) : $request->file('image_3');
+        if ($img3) {
+          $newImageName3 = time() . '_3_' . rand(1000, 9999) . '.' . $img3->extension();
+          $img3->move(public_path('setting/banner'), $newImageName3);
+        }
+      }
+
+      $newImageName4 = null;
+      if ($request->hasFile('image_4')) {
+        $img4 = is_array($request->file('image_4')) ? ($request->file('image_4')[$key] ?? null) : $request->file('image_4');
+        if ($img4) {
+          $newImageName4 = time() . '_4_' . rand(1000, 9999) . '.' . $img4->extension();
+          $img4->move(public_path('setting/banner'), $newImageName4);
+        }
+      }
+
+      $file_name = null;
+      if ($request->ban_img != null) {
         $ban_img = $request->ban_img;
         $extention = $ban_img->getClientOriginalExtension();
-        $file_name = rand(100000,999999).'.'.$extention;
-        Image::make($ban_img)->save(public_path('setting/banner/'.$file_name));
+        $file_name = rand(100000, 999999) . '.' . $extention;
+        Image::make($ban_img)->save(public_path('setting/banner/' . $file_name));
       }
+
       $slider = new Service();
-      $slider->service_image = $newImageName ?? null;
+      $slider->service_image = $newImageName;
+      $slider->service_image_2 = $newImageName2;
+      $slider->service_image_3 = $newImageName3;
+      $slider->service_image_4 = $newImageName4;
       $slider->ban_img = $file_name ?? null;
       $slider->ban_title = $request->ban_title ?? null;
       $slider->title = $request->title[$key] ?? null;
@@ -777,6 +814,7 @@ class SettingController extends Controller
 
     return redirect()->back()->withFlashSuccess('Service Store Successfully');
   }
+
   public function serviceedit($id)
   {
     $notice = DB::table('services')->find($id);
@@ -786,34 +824,75 @@ class SettingController extends Controller
   public function serviceupdate(Request $request)
   {
     $id = $request->notice_id;
-    if ($request->image) {
-      $newImageName = time() . '.' . $request->image->extension();
-      $image = $request->image->move(public_path('setting/banner'), $newImageName);
-    } else {
-      $newImageName = $request->oldimage;
-    }
-    if($request->ban_img != null){
-        // $banner_img = Service::where('id', $request->id)->first()->ban_img;
-        // $ban_img_del = public_path('setting/banner/'. $banner_img);
-        // unlink($ban_img_del);
-
-        $ban_img = $request->ban_img;
-        $extention = $ban_img->getClientOriginalExtension();
-        $file_name = rand(100000,999999).'.'.$extention;
-        Image::make($ban_img)->save(public_path('setting/banner/'.$file_name));
-      }
     $slider = Service::find($id);
-    $slider->ban_title = $request->ban_title ?? $slider->ban_title;
-    $slider->ban_img = $file_name ?? $slider->ban_img;
-    $slider->title = $request->title ?? $slider->title;
-    $slider->description = $request->description ?? $slider->description;
-    $slider->service_image = $newImageName ?? $slider->service_image;
-    $slider->service_title = $request->service_title ?? $slider->service_title;
-    $slider->service_details = $request->service_details ?? $slider->service_details;
-    $slider->homepage = $request->homepage ?? $slider->homepage;
-    $slider->is_active = $request->is_active ?? $slider->is_active;
-    $slider->save();
-    return redirect('/admin/setting/service')->withFlashSuccess('Service Updated Successfully');;
+
+    // Image 1 (Main)
+    if ($request->hasFile('image')) {
+      $newImageName = time() . '_1_' . rand(1000, 9999) . '.' . $request->file('image')->extension();
+      $request->file('image')->move(public_path('setting/banner'), $newImageName);
+    } elseif ($request->boolean('remove_image')) {
+      $newImageName = null;
+    } else {
+      $newImageName = $request->oldimage ?? ($slider ? $slider->service_image : null);
+    }
+
+    // Image 2
+    if ($request->hasFile('image_2')) {
+      $newImageName2 = time() . '_2_' . rand(1000, 9999) . '.' . $request->file('image_2')->extension();
+      $request->file('image_2')->move(public_path('setting/banner'), $newImageName2);
+    } elseif ($request->boolean('remove_image_2')) {
+      $newImageName2 = null;
+    } else {
+      $newImageName2 = $request->oldimage_2 ?? ($slider ? $slider->service_image_2 : null);
+    }
+
+    // Image 3
+    if ($request->hasFile('image_3')) {
+      $newImageName3 = time() . '_3_' . rand(1000, 9999) . '.' . $request->file('image_3')->extension();
+      $request->file('image_3')->move(public_path('setting/banner'), $newImageName3);
+    } elseif ($request->boolean('remove_image_3')) {
+      $newImageName3 = null;
+    } else {
+      $newImageName3 = $request->oldimage_3 ?? ($slider ? $slider->service_image_3 : null);
+    }
+
+    // Image 4
+    if ($request->hasFile('image_4')) {
+      $newImageName4 = time() . '_4_' . rand(1000, 9999) . '.' . $request->file('image_4')->extension();
+      $request->file('image_4')->move(public_path('setting/banner'), $newImageName4);
+    } elseif ($request->boolean('remove_image_4')) {
+      $newImageName4 = null;
+    } else {
+      $newImageName4 = $request->oldimage_4 ?? ($slider ? $slider->service_image_4 : null);
+    }
+
+    $file_name = null;
+    if ($request->ban_img != null) {
+      $ban_img = $request->ban_img;
+      $extention = $ban_img->getClientOriginalExtension();
+      $file_name = rand(100000, 999999) . '.' . $extention;
+      Image::make($ban_img)->save(public_path('setting/banner/' . $file_name));
+    }
+
+    if ($slider) {
+      $slider->ban_title = $request->ban_title ?? $slider->ban_title;
+      if ($file_name) {
+        $slider->ban_img = $file_name;
+      }
+      $slider->title = $request->title ?? $slider->title;
+      $slider->description = $request->description ?? $slider->description;
+      $slider->service_image = $newImageName;
+      $slider->service_image_2 = $newImageName2;
+      $slider->service_image_3 = $newImageName3;
+      $slider->service_image_4 = $newImageName4;
+      $slider->service_title = $request->service_title ?? $slider->service_title;
+      $slider->service_details = $request->service_details ?? $slider->service_details;
+      $slider->homepage = $request->homepage ?? $slider->homepage;
+      $slider->is_active = $request->is_active ?? $slider->is_active;
+      $slider->save();
+    }
+
+    return redirect('/admin/setting/service')->withFlashSuccess('Service Updated Successfully');
   }
 
 
@@ -1033,22 +1112,32 @@ class SettingController extends Controller
   // gallery start
   public function gallery()
   {
-    return view('backend.content.settings.gallery.index');
+    $multis = Gallery::orderBy('id', 'DESC')->get();
+    return view('backend.content.settings.gallery.index', compact('multis'));
   }
+
   public function gallerystore(Request $request)
   {
-    if ($request->image) {
+    $request->validate([
+      'image' => 'required',
+      'title' => 'nullable|string|max:255',
+    ]);
+
+    $newImageName = null;
+    if ($request->hasFile('image')) {
       $newImageName = time() . '.' . $request->image->extension();
-      $image = $request->image->move(public_path('setting/banner'), $newImageName);
+      $request->image->move(public_path('setting/banner'), $newImageName);
     }
 
     $gallery = new Gallery;
+    $gallery->title = $request->title;
     $gallery->image = $newImageName;
+    $gallery->is_active = 1;
     $gallery->save();
 
-
-    return redirect()->back()->withFlashSuccess('gallery Store Successfully');
+    return redirect()->back()->withFlashSuccess('Gallery Stored Successfully');
   }
+
   public function galleryedit($id)
   {
     $notice = Gallery::find($id);
@@ -1058,18 +1147,33 @@ class SettingController extends Controller
   public function galleryupdate(Request $request)
   {
     $id = $request->gallery_id;
-    if ($request->image) {
+    $gallery = Gallery::findOrFail($id);
+
+    if ($request->hasFile('image')) {
       $newImageName = time() . '.' . $request->image->extension();
-      $image = $request->image->move(public_path('setting/banner'), $newImageName);
+      $request->image->move(public_path('setting/banner'), $newImageName);
     } else {
-      $newImageName = $request->oldimage;
+      $newImageName = $request->oldimage ?? $gallery->image;
     }
 
-    $gallery = Gallery::find($id);
+    $gallery->title = $request->title;
     $gallery->image = $newImageName;
-    $gallery->is_active = $request->is_active;
+    $gallery->is_active = $request->is_active ?? 1;
     $gallery->save();
-    return redirect('/admin/setting/gallery')->withFlashSuccess('gallery Updated Successfully');;
+
+    return redirect('/admin/setting/gallery')->withFlashSuccess('Gallery Updated Successfully');
+  }
+
+  public function gallerydelete($id)
+  {
+    $gallery = Gallery::find($id);
+    if ($gallery) {
+      if ($gallery->image && file_exists(public_path('setting/banner/' . $gallery->image))) {
+        @unlink(public_path('setting/banner/' . $gallery->image));
+      }
+      $gallery->delete();
+    }
+    return redirect()->back()->withFlashSuccess('Gallery Deleted Successfully');
   }
   // gallery end
   // activity start
@@ -1430,7 +1534,9 @@ function video_store(Request $request){
     videos::insert([
         'video_title'=>$request->video_title,
         'video_url'=>$request->video_url,
+        'is_active'=>1,
         'created_at'=>Carbon::now(),
+        'updated_at'=>Carbon::now(),
     ]);
     return back()->withFlashSuccess('Video Add Successfully');
 }
@@ -1615,32 +1721,70 @@ function team_update(Request $request){
   // blog_store
 function blogs_store(Request $request){
     $request->validate([
-        '*'=>'required',
+        'blog_title' => 'required',
+        'blog_sort' => 'required',
+        'blog_long' => 'required',
     ]);
 
-        // blog banner img
-        $blog_ban_img = $request->blog_ban_img;
+    // blog banner img
+    $file_name_ban = null;
+    if ($request->hasFile('blog_ban_img')) {
+        $blog_ban_img = $request->file('blog_ban_img');
         $extention = $blog_ban_img->getClientOriginalExtension();
-        $file_name_ban = rand(100000,999999).'.'.$extention;
-        Image::make($blog_ban_img)->save(public_path('backend_img/blogs/'.$file_name_ban));
+        $file_name_ban = rand(100000, 999999) . '.' . $extention;
+        Image::make($blog_ban_img)->save(public_path('backend_img/blogs/' . $file_name_ban));
+    }
 
-        // blog_img
-        $blog_img = $request->blog_img;
+    // blog_img (Main)
+    $file_name = null;
+    if ($request->hasFile('blog_img')) {
+        $blog_img = $request->file('blog_img');
         $extention = $blog_img->getClientOriginalExtension();
-        $file_name = rand(100000,999999).'.'.$extention;
-        Image::make($blog_img)->save(public_path('backend_img/blogs/'.$file_name));
+        $file_name = rand(100000, 999999) . '.' . $extention;
+        Image::make($blog_img)->save(public_path('backend_img/blogs/' . $file_name));
+    }
 
+    // blog_img_2
+    $file_name_2 = null;
+    if ($request->hasFile('blog_img_2')) {
+        $blog_img_2 = $request->file('blog_img_2');
+        $extention = $blog_img_2->getClientOriginalExtension();
+        $file_name_2 = rand(100000, 999999) . '.' . $extention;
+        Image::make($blog_img_2)->save(public_path('backend_img/blogs/' . $file_name_2));
+    }
 
-    BlogModel::insert([
-        'blog_ban_title'=>$request->blog_ban_title,
-        'blog_img'=>$file_name,
-        'blog_title'=>$request->blog_title,
-        'blog_ban_img'=>$file_name_ban,
-        'blog_sort'=>$request->blog_sort,
-        'blog_long'=>$request->blog_long,
-        'created_at'=>Carbon::now(),
+    // blog_img_3
+    $file_name_3 = null;
+    if ($request->hasFile('blog_img_3')) {
+        $blog_img_3 = $request->file('blog_img_3');
+        $extention = $blog_img_3->getClientOriginalExtension();
+        $file_name_3 = rand(100000, 999999) . '.' . $extention;
+        Image::make($blog_img_3)->save(public_path('backend_img/blogs/' . $file_name_3));
+    }
+
+    // blog_img_4
+    $file_name_4 = null;
+    if ($request->hasFile('blog_img_4')) {
+        $blog_img_4 = $request->file('blog_img_4');
+        $extention = $blog_img_4->getClientOriginalExtension();
+        $file_name_4 = rand(100000, 999999) . '.' . $extention;
+        Image::make($blog_img_4)->save(public_path('backend_img/blogs/' . $file_name_4));
+    }
+
+    BlogModel::create([
+        'blog_ban_title' => $request->blog_ban_title,
+        'blog_img' => $file_name,
+        'blog_img_2' => $file_name_2,
+        'blog_img_3' => $file_name_3,
+        'blog_img_4' => $file_name_4,
+        'blog_title' => $request->blog_title,
+        'blog_ban_img' => $file_name_ban,
+        'blog_sort' => $request->blog_sort,
+        'blog_long' => $request->blog_long,
+        'is_active' => $request->is_active ?? 1,
     ]);
-    return back()->withFlashSuccess('Blog Add Successfully');
+
+    return back()->withFlashSuccess('Blog Added Successfully');
 }
 
 // blog edit
@@ -1654,101 +1798,69 @@ function blogs_edit($id){
 // blogs_update
 function blogs_update(Request $request){
     $blogs_id = $request->blogs_id;
+    $blog = BlogModel::findOrFail($blogs_id);
 
-    if($request->blog_ban_img == ''){
-        if($request->blog_img == ''){
-            BlogModel::find($blogs_id)->update([
-                'blog_ban_title'=>$request->blog_ban_title,
-                'blog_title'=>$request->blog_title,
-                'blog_sort'=>$request->blog_sort,
-                'blog_long'=>$request->blog_long,
-                'is_active'=>$request->is_active,
-            ]);
-            return redirect()->route('admin.setting.blogs')->withFlashSuccess('Blog Update Successfully');
-        }
-        else{
-            // blog image
-
-            $blogs_img = BlogModel::where('id', $request->blogs_id)->first()->blog_img;
-            $blog_img_del = public_path('backend_img/blogs/'. $blogs_img);
-            unlink($blog_img_del);
-
-            $blog_imgs = $request->blog_img;
-            $extention = $blog_imgs->getClientOriginalExtension();
-            $file_name = rand(100000, 999999).'.'.$extention;
-            Image::make($blog_imgs)->save(public_path('backend_img/blogs/'.$file_name));
-
-            BlogModel::find($blogs_id)->update([
-                'blog_ban_title'=>$request->blog_ban_title,
-                'blog_img'=>$file_name,
-                'blog_title'=>$request->blog_title,
-                'blog_sort'=>$request->blog_sort,
-                'blog_long'=>$request->blog_long,
-                'is_active'=>$request->is_active,
-            ]);
-            return redirect()->route('admin.setting.blogs')->withFlashSuccess('Blog Update Successfully');
-        }
-
+    // Banner image
+    if ($request->hasFile('blog_ban_img')) {
+        $blog_ban_img = $request->file('blog_ban_img');
+        $extention = $blog_ban_img->getClientOriginalExtension();
+        $file_name_ban = rand(100000, 999999) . '.' . $extention;
+        Image::make($blog_ban_img)->save(public_path('backend_img/blogs/' . $file_name_ban));
+        $blog->blog_ban_img = $file_name_ban;
     }
 
-    else{
-
-        if($request->blog_img == ''){
-
-            // blog banner image
-            $blogs_ban_img = BlogModel::where('id', $request->blogs_id)->first()->blog_ban_img;
-            $blog_img_del = public_path('backend_img/blogs/'. $blogs_ban_img);
-            unlink($blog_img_del);
-
-            $blog_imgs = $request->blog_ban_img;
-            $extention = $blog_imgs->getClientOriginalExtension();
-            $file_name_ban = rand(100000, 999999).'.'.$extention;
-            Image::make($blog_imgs)->save(public_path('backend_img/blogs/'.$file_name_ban));
-
-            BlogModel::find($blogs_id)->update([
-                'blog_ban_title'=>$request->blog_ban_title,
-                'blog_title'=>$request->blog_title,
-                'blog_ban_img'=>$file_name_ban,
-                'blog_sort'=>$request->blog_sort,
-                'blog_long'=>$request->blog_long,
-                'is_active'=>$request->is_active,
-            ]);
-            return redirect()->route('admin.setting.blogs')->withFlashSuccess('Blog Update Successfully');
-        }
-        else{
-            // blog banner image
-            $blogs_ban_img = BlogModel::where('id', $request->blogs_id)->first()->blog_ban_img;
-            $blog_img_del = public_path('backend_img/blogs/'. $blogs_ban_img);
-            unlink($blog_img_del);
-
-            $blog_imgs = $request->blog_ban_img;
-            $extention = $blog_imgs->getClientOriginalExtension();
-            $file_name_ban = rand(100000, 999999).'.'.$extention;
-            Image::make($blog_imgs)->save(public_path('backend_img/blogs/'.$file_name_ban));
-
-            // blog image
-            $blogs_img = BlogModel::where('id', $request->blogs_id)->first()->blog_img;
-            $blog_img_del = public_path('backend_img/blogs/'. $blogs_img);
-            unlink($blog_img_del);
-
-            $blog_imgs = $request->blog_img;
-            $extention = $blog_imgs->getClientOriginalExtension();
-            $file_name = rand(100000, 999999).'.'.$extention;
-            Image::make($blog_imgs)->save(public_path('backend_img/blogs/'.$file_name));
-
-            BlogModel::find($blogs_id)->update([
-                'blog_ban_title'=>$request->blog_ban_title,
-                'blog_img'=>$file_name,
-                'blog_title'=>$request->blog_title,
-                'blog_ban_img'=>$file_name_ban,
-                'blog_sort'=>$request->blog_sort,
-                'blog_long'=>$request->blog_long,
-                'is_active'=>$request->is_active,
-            ]);
-            return redirect()->route('admin.setting.blogs')->withFlashSuccess('Blog Update Successfully');
-        }
+    // Main blog_img
+    if ($request->hasFile('blog_img')) {
+        $blog_img = $request->file('blog_img');
+        $extention = $blog_img->getClientOriginalExtension();
+        $file_name = rand(100000, 999999) . '.' . $extention;
+        Image::make($blog_img)->save(public_path('backend_img/blogs/' . $file_name));
+        $blog->blog_img = $file_name;
+    } elseif ($request->boolean('remove_blog_img')) {
+        $blog->blog_img = null;
     }
 
+    // blog_img_2
+    if ($request->hasFile('blog_img_2')) {
+        $blog_img_2 = $request->file('blog_img_2');
+        $extention = $blog_img_2->getClientOriginalExtension();
+        $file_name_2 = rand(100000, 999999) . '.' . $extention;
+        Image::make($blog_img_2)->save(public_path('backend_img/blogs/' . $file_name_2));
+        $blog->blog_img_2 = $file_name_2;
+    } elseif ($request->boolean('remove_blog_img_2')) {
+        $blog->blog_img_2 = null;
+    }
+
+    // blog_img_3
+    if ($request->hasFile('blog_img_3')) {
+        $blog_img_3 = $request->file('blog_img_3');
+        $extention = $blog_img_3->getClientOriginalExtension();
+        $file_name_3 = rand(100000, 999999) . '.' . $extention;
+        Image::make($blog_img_3)->save(public_path('backend_img/blogs/' . $file_name_3));
+        $blog->blog_img_3 = $file_name_3;
+    } elseif ($request->boolean('remove_blog_img_3')) {
+        $blog->blog_img_3 = null;
+    }
+
+    // blog_img_4
+    if ($request->hasFile('blog_img_4')) {
+        $blog_img_4 = $request->file('blog_img_4');
+        $extention = $blog_img_4->getClientOriginalExtension();
+        $file_name_4 = rand(100000, 999999) . '.' . $extention;
+        Image::make($blog_img_4)->save(public_path('backend_img/blogs/' . $file_name_4));
+        $blog->blog_img_4 = $file_name_4;
+    } elseif ($request->boolean('remove_blog_img_4')) {
+        $blog->blog_img_4 = null;
+    }
+
+    $blog->blog_ban_title = $request->blog_ban_title;
+    $blog->blog_title = $request->blog_title;
+    $blog->blog_sort = $request->blog_sort;
+    $blog->blog_long = $request->blog_long;
+    $blog->is_active = $request->is_active ?? $blog->is_active;
+    $blog->save();
+
+    return redirect()->route('admin.setting.blogs')->withFlashSuccess('Blog Updated Successfully');
 }
 
   // blog start
@@ -1870,10 +1982,50 @@ function shedule_update(Request $request){
 }
 
 function appointment(){
-    $appointments = appointment::all();
+    $appointments = appointment::with('rel_to_service')->orderBy('id', 'desc')->get();
     return view('backend.content.settings.appoinment.appoinment', [
         'appointments'=>$appointments,
     ]);
+}
+
+function appointment_delete($id){
+    appointment::find($id)?->delete();
+    return back()->withFlashSuccess('Appointment Deleted Successfully');
+}
+
+function appointment_status($id){
+    $appointment = appointment::find($id);
+    if($appointment){
+        $appointment->is_connect = $appointment->is_connect == 1 ? 0 : 1;
+        $appointment->save();
+        $statusText = $appointment->is_connect == 1 ? 'marked as Connected' : 'marked as Pending';
+        return back()->withFlashSuccess("Appointment {$statusText} successfully");
+    }
+    return back()->withFlashDanger('Appointment not found');
+}
+
+// contact_messages
+function contact_messages(){
+    $messages = contactUs::orderBy('id', 'desc')->get();
+    return view('backend.content.settings.contact_messages.index', [
+        'messages' => $messages,
+    ]);
+}
+
+function contact_message_status($id){
+    $message = contactUs::find($id);
+    if($message){
+        $message->is_active = $message->is_active == 1 ? 0 : 1;
+        $message->save();
+        $statusText = $message->is_active == 1 ? 'marked as Read' : 'marked as Unread';
+        return back()->withFlashSuccess("Message {$statusText} successfully");
+    }
+    return back()->withFlashDanger('Message not found');
+}
+
+function contact_message_delete($id){
+    contactUs::find($id)?->delete();
+    return back()->withFlashSuccess('Contact Message Deleted Successfully');
 }
 
 }

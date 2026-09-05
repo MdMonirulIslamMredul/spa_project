@@ -15,6 +15,39 @@
                         :active="activeClass(Route::is('admin.dashboard'))" class="nav-link" />
                 </li>
 
+                <li class="nav-item">
+                    <a href="{{ route('admin.setting.appointment') }}" class="nav-link {{ request()->routeIs('admin.setting.appointment*') ? 'active' : '' }}">
+                        <i class="fas fa-calendar-check nav-icon"></i>
+                        <p>
+                            Appointment Page
+                            @php
+                                $notConnectedCount = \App\Models\appointment::where('is_connect', 0)->count();
+                            @endphp
+                            @if ($notConnectedCount > 0)
+                                <span class="badge badge-danger right font-weight-bold" style="font-size: 0.75rem; padding: 3px 7px; border-radius: 10px;" title="{{ $notConnectedCount }} Not Connected">
+                                    {{ $notConnectedCount }}
+                                </span>
+                            @endif
+                        </p>
+                    </a>
+                </li>  
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.setting.contact_messages') }}" class="nav-link {{ request()->routeIs('admin.setting.contact_messages*') ? 'active' : '' }}">
+                        <i class="fas fa-envelope-open-text nav-icon"></i>
+                        <p>
+                            Contact Messages
+                            @php
+                                $unreadMessagesCount = \App\Models\contactUs::where('is_active', 0)->count();
+                            @endphp
+                            @if ($unreadMessagesCount > 0)
+                                <span class="badge badge-warning text-dark right font-weight-bold" style="font-size: 0.75rem; padding: 3px 7px; border-radius: 10px;" title="{{ $unreadMessagesCount }} Unread Messages">
+                                    {{ $unreadMessagesCount }}
+                                </span>
+                            @endif
+                        </p>
+                    </a>
+                </li>  
 
                 @if (
                     $logged_in_user->hasAllAccess() ||
@@ -48,10 +81,10 @@
                                     :text="__('Team Settings')" />
                             </li>
 
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <x-utils.link :href="route('admin.setting.shedule')" icon="nav-icon icon-arrow-right" class="nav-link"
                                     :text="__('Time Shedule Settings')" />
-                            </li>
+                            </li> --}}
 
                             <li class="nav-item">
                                 <x-utils.link :href="route('admin.setting.blogs')" icon="nav-icon icon-arrow-right" class="nav-link"
@@ -64,8 +97,15 @@
                                     :text="__('Page Settings')" />
                             </li> --}}
                             <li class="nav-item">
-                                <x-utils.link :href="route('admin.setting.appointment')" icon="nav-icon icon-arrow-right" class="nav-link"
-                                    :text="__('Appointment')" />
+                                <a href="{{ route('admin.setting.appointment') }}" class="nav-link {{ request()->routeIs('admin.setting.appointment*') ? 'active' : '' }}">
+                                    <i class="nav-icon icon-arrow-right"></i>
+                                    <p>
+                                        Appointment
+                                        @if ($notConnectedCount > 0)
+                                            <span class="badge badge-danger right font-weight-bold" style="font-size: 0.72rem; padding: 2px 6px; border-radius: 10px;">{{ $notConnectedCount }}</span>
+                                        @endif
+                                    </p>
+                                </a>
                             </li>
                             <li class="nav-item">
                                 <x-utils.link :href="route('admin.setting.slider')" icon="nav-icon icon-arrow-right" class="nav-link"
@@ -83,18 +123,18 @@
                                 <x-utils.link :href="route('admin.setting.brand')" icon="nav-icon icon-arrow-right" class="nav-link"
                                     :text="__('Brand Settings')" />
                             </li> --}}
-                            {{-- <li class="nav-item">
+                            <li class="nav-item">
                                 <x-utils.link :href="route('admin.setting.gallery')" icon="nav-icon icon-arrow-right" class="nav-link"
                                     :text="__('Gallery Settings')" />
-                            </li> --}}
+                            </li>
                             {{-- <li class="nav-item">
                                 <x-utils.link :href="route('admin.setting.donate')" icon="nav-icon icon-arrow-right" class="nav-link"
                                     :text="__('Donate Settings')" />
                             </li> --}}
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <x-utils.link :href="route('admin.setting.project')" icon="nav-icon icon-arrow-right" class="nav-link"
-                                    :text="__('Gallery Settings')" />
-                            </li>
+                                    :text="__('Project Settings')" />
+                            </li> --}}
                             <li class="nav-item">
                                 <x-utils.link :href="route('admin.setting.service')" icon="nav-icon icon-arrow-right" class="nav-link"
                                     :text="__('Service Settings')" />
@@ -111,10 +151,10 @@
                                 <x-utils.link :href="route('admin.setting.secrets')" icon="nav-icon icon-arrow-right" class="nav-link"
                                     :text="__('Home About Settings')" />
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <x-utils.link :href="route('admin.setting.pricing')" icon="nav-icon icon-arrow-right" class="nav-link"
                                     :text="__('Pricing Settings')" />
-                            </li>
+                            </li> --}}
                             <li class="nav-item">
                                 <x-utils.link :href="route('admin.setting.video')" icon="nav-icon icon-arrow-right" class="nav-link"
                                     :text="__('Videos Settings')" />

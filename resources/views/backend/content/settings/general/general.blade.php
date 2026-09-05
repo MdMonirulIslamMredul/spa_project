@@ -37,20 +37,20 @@
                                     aria-controls="vert-tabs-smsConfigSetting" aria-selected="false">SMS Configuration
                                     Setting</a>
 
-                                <a class="nav-link" id="vert-tabs-bannerSetting-tab" data-toggle="pill"
+                                {{-- <a class="nav-link" id="vert-tabs-bannerSetting-tab" data-toggle="pill"
                                     href="#vert-tabs-highlight" role="tab" aria-controls="vert-tabs-highlight"
-                                    aria-selected="false">Highlight Setting</a>
-                                <a class="nav-link" id="vert-tabs-bannerSetting-tab" data-toggle="pill"
+                                    aria-selected="false">Highlight Setting</a> --}}
+                                {{-- <a class="nav-link" id="vert-tabs-bannerSetting-tab" data-toggle="pill"
                                     href="#vert-tabs-bannerSetting" role="tab" aria-controls="vert-tabs-bannerSetting"
-                                    aria-selected="false">About Setting</a>
-                                <a class="nav-link" id="vert-tabs-volunteerSetting-tab" data-toggle="pill"
+                                    aria-selected="false">About Setting</a> --}}
+                                {{-- <a class="nav-link" id="vert-tabs-volunteerSetting-tab" data-toggle="pill"
                                     href="#vert-tabs-volunteerSetting" role="tab"
-                                    aria-controls="vert-tabs-volunteerSetting" aria-selected="false">Volunteer Setting</a>
+                                    aria-controls="vert-tabs-volunteerSetting" aria-selected="false">Volunteer Setting</a> --}}
 
 
-                                <a class="nav-link" id="vert-tabs-homebackbg-tab" data-toggle="pill"
+                                {{-- <a class="nav-link" id="vert-tabs-homebackbg-tab" data-toggle="pill"
                                     href="#vert-tabs-homebackbg" role="tab" aria-controls="vert-tabs-homebackbg"
-                                    aria-selected="false">Home Background Setting</a>
+                                    aria-selected="false">Home Background Setting</a> --}}
                             </div>
                         </div>
                         <div class="col-7 col-sm-8">
