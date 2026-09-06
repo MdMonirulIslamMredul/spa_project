@@ -82,6 +82,23 @@
                     </ul>
                 </li>
                 <li class="spa-nav-item">
+                    <a href="javascript:void(0)" class="spa-nav-link">
+                        Gallery <i class="fas fa-chevron-down ms-1" style="font-size: 0.75rem;"></i>
+                    </a>
+                    <ul class="spa-dropdown">
+                        <li>
+                            <a href="{{ url('/') }}#photo-gallery">
+                                <i class="fas fa-images me-2 text-warning"></i> Photo Gallery
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('/') }}#video-gallery">
+                                <i class="fas fa-video me-2 text-warning"></i> Video Gallery
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="spa-nav-item">
                     <a href="{{ route('blog') }}" class="spa-nav-link {{ request()->routeIs('blog*') ? 'active' : '' }}">Blog</a>
                 </li>
                 <li class="spa-nav-item">
@@ -149,6 +166,24 @@
                             <li><a href="{{ route('service.view', $service_item->id) }}">{{ $service_item->title }}</a></li>
                         @endforeach
                     @endif
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:void(0)" class="spa-drawer-toggle-sub">
+                    <span><i class="fas fa-images me-2 text-warning"></i> Gallery</span>
+                    <i class="fas fa-chevron-down" style="font-size: 0.8rem;"></i>
+                </a>
+                <ul class="spa-drawer-submenu">
+                    <li>
+                        <a href="{{ url('/') }}#photo-gallery" onclick="$('#spaMobileDrawer').removeClass('open'); $('#spaDrawerBackdrop').removeClass('open');">
+                            Photo Gallery
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url('/') }}#video-gallery" onclick="$('#spaMobileDrawer').removeClass('open'); $('#spaDrawerBackdrop').removeClass('open');">
+                            Video Gallery
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li>
