@@ -29,9 +29,9 @@
     <link rel="stylesheet" href="{{ asset('frontend_assets/css/magnific-popup.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend_assets/css/animate.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link rel="stylesheet" href="{{ asset('frontend_assets/css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend_assets/css/responsive.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend_assets/css/modern-spa.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend_assets/css/style.css') }}?v={{ file_exists(public_path('frontend_assets/css/style.css')) ? filemtime(public_path('frontend_assets/css/style.css')) : time() }}">
+    <link rel="stylesheet" href="{{ asset('frontend_assets/css/responsive.css') }}?v={{ file_exists(public_path('frontend_assets/css/responsive.css')) ? filemtime(public_path('frontend_assets/css/responsive.css')) : time() }}">
+    <link rel="stylesheet" href="{{ asset('frontend_assets/css/modern-spa.css') }}?v={{ file_exists(public_path('frontend_assets/css/modern-spa.css')) ? filemtime(public_path('frontend_assets/css/modern-spa.css')) : time() }}">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     
     @stack('styles')
