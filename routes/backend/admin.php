@@ -85,7 +85,8 @@ Route::group(['prefix' => 'setting', 'as' => 'setting.'], function () {
     Route::get('gallery', [SettingController::class, 'gallery'])->name('gallery');
     Route::post('gallery/store', [SettingController::class, 'gallerystore'])->name('gallery.store');
     Route::post('gallery/update', [SettingController::class, 'galleryupdate'])->name('gallery.update');
-    Route::get('gallery/edit/{id}', [SettingController::class, 'galleryedit']);
+    Route::get('gallery/edit/{id}', [SettingController::class, 'galleryedit'])->name('gallery.edit');
+    Route::get('gallery/delete/{id}', [SettingController::class, 'gallerydelete'])->name('gallery.delete');
 
     Route::get('activity', [SettingController::class, 'activity'])->name('activity');
     Route::post('activity/store', [SettingController::class, 'activitystore'])->name('activity.store');
@@ -191,6 +192,13 @@ Route::group(['prefix' => 'setting', 'as' => 'setting.'], function () {
 
     // appoinment
     Route::get('appointment', [SettingController::class, 'appointment'])->name('appointment');
+    Route::get('appointment/status/{id}', [SettingController::class, 'appointment_status'])->name('appointment.status');
+    Route::get('appointment/delete/{id}', [SettingController::class, 'appointment_delete'])->name('appointment.delete');
+
+    // contact_messages
+    Route::get('contact-messages', [SettingController::class, 'contact_messages'])->name('contact_messages');
+    Route::get('contact-messages/status/{id}', [SettingController::class, 'contact_message_status'])->name('contact_messages.status');
+    Route::get('contact-messages/delete/{id}', [SettingController::class, 'contact_message_delete'])->name('contact_messages.delete');
 });
 
 Route::get('order/local', [OrderController::class, 'walletOrders'])->name('order.local');
