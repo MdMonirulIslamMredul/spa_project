@@ -65,6 +65,394 @@
     </section>
 
     <!-- =========================================================================
+         2. Treatment Packages & Pricing Section (From Services Table)
+         ========================================================================= -->
+    @php
+        $package_items = (isset($services) && count($services) > 0) ? $services : (isset($services_all) && count($services_all) > 0 ? $services_all : []);
+    @endphp
+
+    @if(count($package_items) > 0)
+        <style>
+            /* Treatment Packages High Contrast & Guaranteed Live Server Readability */
+            #packages.spa-pricing-section {
+                background: radial-gradient(circle at top, #14463b 0%, #081e18 100%) !important;
+                padding: 5.5rem 0 !important;
+                position: relative !important;
+            }
+            #packages .spa-section-header .spa-section-subtitle {
+                color: #F3E5AB !important;
+                text-transform: uppercase;
+                letter-spacing: 0.12em;
+                font-weight: 700;
+            }
+            #packages .spa-section-header .spa-section-title {
+                color: #FFFFFF !important;
+                font-weight: 700;
+            }
+            #packages .spa-section-header .spa-section-desc {
+                color: rgba(255, 255, 255, 0.88) !important;
+            }
+            #packages .spa-package-card {
+                background: linear-gradient(165deg, rgba(20, 58, 48, 0.95) 0%, rgba(8, 26, 20, 0.98) 100%) !important;
+                border: 1px solid rgba(212, 175, 55, 0.4) !important;
+                border-radius: 20px !important;
+                overflow: hidden !important;
+                box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45) !important;
+                height: 100% !important;
+                display: flex !important;
+                flex-direction: column !important;
+                transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+            }
+            #packages .spa-package-card:hover {
+                transform: translateY(-7px) !important;
+                border-color: #D4AF37 !important;
+                box-shadow: 0 18px 45px rgba(0, 0, 0, 0.55), 0 0 25px rgba(212, 175, 55, 0.3) !important;
+            }
+            #packages .spa-package-img-wrap {
+                position: relative !important;
+                height: 220px !important;
+                overflow: hidden !important;
+                background-color: #081e18 !important;
+            }
+            #packages .spa-package-img {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: cover !important;
+                display: block !important;
+                transition: transform 0.6s ease !important;
+            }
+            #packages .spa-package-card:hover .spa-package-img {
+                transform: scale(1.08) !important;
+            }
+            #packages .spa-package-img-overlay {
+                position: absolute !important;
+                inset: 0 !important;
+                background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(8, 26, 20, 0.85) 100%) !important;
+                pointer-events: none !important;
+            }
+            #packages .spa-package-badge {
+                position: absolute !important;
+                top: 14px !important;
+                left: 14px !important;
+                background: rgba(8, 26, 20, 0.9) !important;
+                border: 1px solid #D4AF37 !important;
+                color: #F3E5AB !important;
+                font-size: 0.72rem !important;
+                font-weight: 700 !important;
+                letter-spacing: 0.06em !important;
+                text-transform: uppercase !important;
+                padding: 4px 12px !important;
+                border-radius: 30px !important;
+                z-index: 3 !important;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+            }
+            #packages .spa-package-duration-tag {
+                position: absolute !important;
+                top: 14px !important;
+                right: 14px !important;
+                background: rgba(0, 0, 0, 0.75) !important;
+                border: 1px solid rgba(255, 255, 255, 0.35) !important;
+                color: #ffffff !important;
+                font-size: 0.72rem !important;
+                font-weight: 600 !important;
+                padding: 4px 12px !important;
+                border-radius: 30px !important;
+                z-index: 3 !important;
+            }
+            #packages .spa-package-body {
+                padding: 1.6rem !important;
+                display: flex !important;
+                flex-direction: column !important;
+                flex-grow: 1 !important;
+                color: #ffffff !important;
+            }
+            #packages .spa-package-title {
+                color: #FFFFFF !important;
+                font-size: 1.45rem !important;
+                font-weight: 700 !important;
+                margin-bottom: 0.5rem !important;
+                line-height: 1.3 !important;
+                font-family: 'Playfair Display', Georgia, serif !important;
+                text-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
+            }
+            #packages .spa-package-desc {
+                color: rgba(255, 255, 255, 0.88) !important;
+                font-size: 0.88rem !important;
+                line-height: 1.6 !important;
+                margin-bottom: 1.25rem !important;
+            }
+            #packages .spa-package-price-box {
+                background: rgba(212, 175, 55, 0.12) !important;
+                border: 1px solid rgba(212, 175, 55, 0.35) !important;
+                border-radius: 12px !important;
+                padding: 0.85rem 1.1rem !important;
+                margin-bottom: 1.25rem !important;
+            }
+            #packages .spa-package-price-box-header {
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                margin-bottom: 0.35rem !important;
+            }
+            #packages .spa-package-price-label {
+                font-size: 0.72rem !important;
+                text-transform: uppercase !important;
+                letter-spacing: 0.1em !important;
+                color: #F3E5AB !important;
+                font-weight: 700 !important;
+            }
+            #packages .spa-package-price-badge {
+                font-size: 0.68rem !important;
+                background: #D4AF37 !important;
+                color: #081e18 !important;
+                font-weight: 800 !important;
+                padding: 2px 8px !important;
+                border-radius: 10px !important;
+                text-transform: uppercase !important;
+                letter-spacing: 0.05em !important;
+            }
+            #packages .spa-package-price-val {
+                font-size: 1.65rem !important;
+                font-weight: 800 !important;
+                color: #F8E8B8 !important;
+                font-family: 'Playfair Display', Georgia, serif !important;
+                line-height: 1.2 !important;
+            }
+            #packages .spa-package-durations {
+                margin-bottom: 1.25rem !important;
+            }
+            #packages .spa-durations-title {
+                font-size: 0.76rem !important;
+                text-transform: uppercase !important;
+                letter-spacing: 0.07em !important;
+                color: #F3E5AB !important;
+                font-weight: 700 !important;
+                margin-bottom: 0.55rem !important;
+                display: flex !important;
+                align-items: center !important;
+                gap: 6px !important;
+            }
+            #packages .spa-durations-list {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 8px !important;
+            }
+            #packages .spa-duration-pill {
+                background: rgba(255, 255, 255, 0.08) !important;
+                border: 1px solid rgba(212, 175, 55, 0.3) !important;
+                border-radius: 8px !important;
+                padding: 6px 4px !important;
+                text-align: center !important;
+                transition: all 0.25s ease !important;
+            }
+            #packages .spa-duration-pill:hover {
+                background: rgba(212, 175, 55, 0.22) !important;
+                border-color: #D4AF37 !important;
+            }
+            #packages .spa-duration-time {
+                display: block !important;
+                font-size: 0.73rem !important;
+                color: #FFFFFF !important;
+                font-weight: 600 !important;
+                margin-bottom: 2px !important;
+            }
+            #packages .spa-duration-cost {
+                display: block !important;
+                font-size: 0.92rem !important;
+                font-weight: 800 !important;
+                color: #F8E8B8 !important;
+            }
+            #packages .spa-package-perks {
+                list-style: none !important;
+                padding: 0 !important;
+                margin: 0 0 1.5rem 0 !important;
+                flex-grow: 1 !important;
+            }
+            #packages .spa-package-perks li {
+                padding: 7px 0 !important;
+                border-bottom: 1px dashed rgba(255, 255, 255, 0.15) !important;
+                color: rgba(255, 255, 255, 0.92) !important;
+                font-size: 0.86rem !important;
+                display: flex !important;
+                align-items: center !important;
+            }
+            #packages .spa-package-perks li i {
+                color: #D4AF37 !important;
+                margin-right: 10px !important;
+                font-size: 0.85rem !important;
+                flex-shrink: 0 !important;
+            }
+            #packages .spa-package-perks li:last-child {
+                border-bottom: none !important;
+            }
+            #packages .spa-package-actions {
+                margin-top: auto !important;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 10px !important;
+            }
+            #packages .spa-package-actions .spa-btn-primary {
+                background: linear-gradient(135deg, #D4AF37 0%, #C5A880 100%) !important;
+                color: #081e18 !important;
+                font-weight: 800 !important;
+                border: none !important;
+                border-radius: 30px !important;
+                padding: 12px 20px !important;
+                font-size: 0.92rem !important;
+                text-align: center !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-decoration: none !important;
+                box-shadow: 0 4px 15px rgba(212, 175, 55, 0.35) !important;
+                transition: all 0.3s ease !important;
+            }
+            #packages .spa-package-actions .spa-btn-primary:hover {
+                background: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 100%) !important;
+                transform: translateY(-2px) !important;
+                box-shadow: 0 6px 20px rgba(212, 175, 55, 0.45) !important;
+                color: #081e18 !important;
+            }
+            #packages .spa-package-actions .spa-btn-outline-gold {
+                background: transparent !important;
+                color: #F3E5AB !important;
+                border: 1.5px solid rgba(212, 175, 55, 0.7) !important;
+                border-radius: 30px !important;
+                padding: 10px 18px !important;
+                font-size: 0.88rem !important;
+                font-weight: 600 !important;
+                text-align: center !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-decoration: none !important;
+                transition: all 0.25s ease !important;
+            }
+            #packages .spa-package-actions .spa-btn-outline-gold:hover {
+                background: rgba(212, 175, 55, 0.15) !important;
+                border-color: #D4AF37 !important;
+                color: #FFFFFF !important;
+            }
+        </style>
+        <section class="spa-pricing-section" id="packages">
+            <div class="container">
+                <div class="spa-section-header text-white text-center">
+                    <span class="spa-section-subtitle">Affordable Luxury & Transparency</span>
+                    <h2 class="spa-section-title text-white">Wellness & Treatment Packages</h2>
+                    <p class="spa-section-desc">
+                        Explore our all-inclusive therapy packages with flexible session durations and transparent pricing. Every session is conducted in a private luxury suite with organic aromatherapy.
+                    </p>
+                </div>
+
+                <div class="row g-4 justify-content-center">
+                    @foreach ($package_items as $service_pkg)
+                        @php
+                            $detailsText = $service_pkg->service_details ?? '';
+                            preg_match_all('/(\d+\s*Minutes?)\s*[\—\–\-–\:]\s*([0-9,]+)\s*(?:TK|Tk|৳)?/iu', $detailsText, $matches, PREG_SET_ORDER);
+                            $priceTiers = [];
+                            $prices = [];
+                            foreach ($matches as $m) {
+                                $dur = trim($m[1]);
+                                $val = trim($m[2]);
+                                $numericVal = (int) str_replace(',', '', $val);
+                                $priceTiers[] = [
+                                    'duration' => $dur,
+                                    'price' => $val,
+                                    'amount' => $numericVal
+                                ];
+                                $prices[] = $numericVal;
+                            }
+                            
+                            $minPrice = !empty($prices) ? min($prices) : ($service_pkg->price ?? 0);
+                            $maxPrice = !empty($prices) ? max($prices) : ($service_pkg->price ?? 0);
+                            $priceRangeFormatted = ($minPrice == $maxPrice || empty($prices)) 
+                                ? '৳' . number_format($minPrice) 
+                                : '৳' . number_format($minPrice) . ' – ৳' . number_format($maxPrice);
+                                
+                            $cleanDesc = $service_pkg->description;
+                            if (empty($cleanDesc) && !empty($detailsText)) {
+                                $parts = preg_split('/Pricing\s*&\s*Duration/iu', $detailsText);
+                                $cleanDesc = trim($parts[0] ?? '');
+                            }
+                            if (empty($cleanDesc)) {
+                                $cleanDesc = 'Experience authentic restorative therapy designed to alleviate fatigue, soothe muscular tension, and renew vitality.';
+                            }
+
+                            $pkgTitle = $service_pkg->title ?? $service_pkg->service_title ?? 'Spa Treatment Package';
+                            $pkgImg = $service_pkg->service_image ? asset('/setting/banner/' . $service_pkg->service_image) : ($service_pkg->ban_img ? asset('/setting/banner/' . $service_pkg->ban_img) : asset('frontend_assets/img/slider/slider-1.jpg'));
+                        @endphp
+                        <div class="col-lg-4 col-md-6">
+                            <div class="spa-package-card">
+                                <!-- Package Image Banner -->
+                                <div class="spa-package-img-wrap">
+                                    <img src="{{ $pkgImg }}" alt="{{ $pkgTitle }}" class="spa-package-img" loading="lazy">
+                                    <div class="spa-package-img-overlay"></div>
+                                    <span class="spa-package-badge"><i class="fas fa-crown text-warning me-1"></i> Signature Package</span>
+                                    <span class="spa-package-duration-tag"><i class="far fa-clock me-1"></i> 60 - 120 Mins</span>
+                                </div>
+
+                                <!-- Package Body Content -->
+                                <div class="spa-package-body">
+                                    <h3 class="spa-package-title">{{ $pkgTitle }}</h3>
+                                    <p class="spa-package-desc">{{ \Illuminate\Support\Str::limit($cleanDesc, 110) }}</p>
+
+                                    <!-- Price Range Box -->
+                                    <div class="spa-package-price-box">
+                                        <div class="spa-package-price-box-header">
+                                            <span class="spa-package-price-label">Price Range</span>
+                                            <span class="spa-package-price-badge">All Inclusive</span>
+                                        </div>
+                                        <div class="spa-package-price-val">
+                                            {{ $priceRangeFormatted }}
+                                        </div>
+                                    </div>
+
+                                    <!-- Session Durations & Pricing Breakdown -->
+                                    @if(count($priceTiers) > 0)
+                                        <div class="spa-package-durations">
+                                            <div class="spa-durations-title">
+                                                <i class="fas fa-stopwatch text-warning"></i> Available Session Durations:
+                                            </div>
+                                            <div class="spa-durations-list">
+                                                @foreach($priceTiers as $tier)
+                                                    <div class="spa-duration-pill">
+                                                        <span class="spa-duration-time">{{ $tier['duration'] }}</span>
+                                                        <span class="spa-duration-cost">৳{{ $tier['price'] }}</span>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <!-- Package Perks & Inclusions -->
+                                    <ul class="spa-package-perks">
+                                        <li><i class="fas fa-check text-warning me-2"></i> Private Suite with Ambient Shower</li>
+                                        <li><i class="fas fa-check text-warning me-2"></i> Certified Master Therapist</li>
+                                        <li><i class="fas fa-check text-warning me-2"></i> 100% Organic Botanical Essential Oils</li>
+                                        <li><i class="fas fa-check text-warning me-2"></i> Complimentary Herbal Tea & Refreshment</li>
+                                    </ul>
+
+                                    <!-- Action Buttons -->
+                                    <div class="spa-package-actions">
+                                        <a href="tel:{{ get_setting('office_phone') }}" class="spa-btn spa-btn-primary w-100">
+                                            <i class="fas fa-phone-alt me-2"></i> Book This Package
+                                        </a>
+                                        <a href="{{ route('service.view', $service_pkg->id) }}" class="spa-btn-outline-gold w-100">
+                                            <i class="fas fa-info-circle me-1"></i> View Full Details
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+
+
+
+    <!-- =========================================================================
          2. Services Section
          ========================================================================= -->
     <section class="py-5" id="services">
@@ -141,11 +529,20 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="spa-about-img-box">
-                            @if($secrets->first()->secrets_img_l)
-                                <img src="{{ asset('backend_img/secrets/' . $secrets->first()->secrets_img_l) }}" alt="Spa Treatment" class="rounded-4 w-100 shadow-lg">
-                            @elseif($secrets->first()->secrets_img_r)
-                                <img src="{{ asset('backend_img/secrets/' . $secrets->first()->secrets_img_r) }}" alt="Spa Treatment" class="rounded-4 w-100 shadow-lg">
-                            @endif
+                            @php
+                                $secret = $secrets->first();
+                                $secretImg = null;
+                                if ($secret && $secret->secrets_img_l && file_exists(public_path('backend_img/secrets/' . $secret->secrets_img_l))) {
+                                    $secretImg = asset('backend_img/secrets/' . $secret->secrets_img_l);
+                                } elseif ($secret && $secret->secrets_img_r && file_exists(public_path('backend_img/secrets/' . $secret->secrets_img_r))) {
+                                    $secretImg = asset('backend_img/secrets/' . $secret->secrets_img_r);
+                                } elseif ($secret && $secret->secrets_img && file_exists(public_path('backend_img/secrets/' . $secret->secrets_img))) {
+                                    $secretImg = asset('backend_img/secrets/' . $secret->secrets_img);
+                                } else {
+                                    $secretImg = asset('backend_img/secrets/spa_philosophy.jpg');
+                                }
+                            @endphp
+                            <img src="{{ $secretImg }}" alt="Spa Treatment Sanctuary" class="rounded-4 w-100 shadow-lg">
                         </div>
                     </div>
                 </div>
@@ -153,56 +550,15 @@
         </section>
     @endif
 
-    <!-- =========================================================================
-         4. Pricing Section
-         ========================================================================= -->
-    @if(isset($pricings) && count($pricings) > 0)
-        <section class="spa-pricing-section">
-            <div class="container">
-                <div class="spa-section-header text-white">
-                    <span class="spa-section-subtitle">Affordable Luxury</span>
-                    <h2 class="spa-section-title text-white">Treatment Packages & Pricing</h2>
-                    <p class="spa-section-desc">
-                        Select from our transparently priced wellness packages or consult with our front desk for custom sessions.
-                    </p>
-                </div>
-
-                <div class="row g-4 justify-content-center">
-                    @foreach ($pricings as $pricing)
-                        <div class="col-lg-4 col-md-6">
-                            <div class="spa-pricing-card">
-                                @if($pricing->image)
-                                    <img src="{{ asset('backend_img/pricing/' . $pricing->image) }}" alt="{{ $pricing->title }}" class="spa-pricing-img">
-                                @endif
-                                <h3 class="spa-pricing-title">{{ $pricing->title }}</h3>
-                                <div class="spa-pricing-tag">Special Package</div>
-                                <div class="spa-pricing-amount">
-                                    {{ $pricing->price }} <span>TK</span>
-                                </div>
-                                <ul class="spa-pricing-features">
-                                    <li><i class="fas fa-check text-warning me-2"></i> Full Body Thai Therapy</li>
-                                    <li><i class="fas fa-check text-warning me-2"></i> Herbal Hot Compress</li>
-                                    <li><i class="fas fa-check text-warning me-2"></i> Complimentary Herbal Tea</li>
-                                    <li><i class="fas fa-check text-warning me-2"></i> Private Suite Experience</li>
-                                </ul>
-                                <div class="mt-auto">
-                                    <a href="tel:{{ get_setting('office_phone') }}" class="spa-btn spa-btn-primary w-100">
-                                        <i class="fas fa-phone-alt"></i> Book This Package
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </section>
-    @endif
 
     <!-- =========================================================================
          5. Photo Gallery Section
          ========================================================================= -->
-    @if(isset($projects) && count($projects) > 0)
-        <section class="py-5 bg-white">
+    @php
+        $galleryItems = (isset($images) && count($images) > 0) ? $images : collect();
+    @endphp
+    @if(isset($galleryItems) && count($galleryItems) > 0)
+        <section class="py-5 bg-white" id="photo-gallery">
             <div class="container py-4">
                 <div class="spa-section-header">
                     <span class="spa-section-subtitle">Atmosphere & Suites</span>
@@ -213,7 +569,9 @@
                 <div class="spa-gallery-filter">
                     <button class="active" data-filter="*">All Moments</button>
                     @php
-                        $categories = $projects->pluck('header_title')->unique();
+                        $categories = $galleryItems->map(function($item) {
+                            return $item->title ?? $item->header_title;
+                        })->filter()->unique();
                     @endphp
                     @foreach ($categories as $cat)
                         @if($cat)
@@ -223,14 +581,24 @@
                 </div>
 
                 <div class="row g-4 spa-photo-grid">
-                    @foreach ($projects as $project)
-                        <div class="col-lg-4 col-md-6 spa-photo-item {{ \Illuminate\Support\Str::slug($project->header_title) }}">
+                    @foreach ($galleryItems as $item)
+                        @php
+                            $itemTitle = $item->title ?? $item->header_title ?? 'Spa Sanctuary';
+                            $itemImg = asset('/setting/banner/' . $item->image);
+                            $catSlug = \Illuminate\Support\Str::slug($itemTitle);
+                        @endphp
+                        <div class="col-lg-4 col-md-6 spa-photo-item {{ $catSlug }}">
                             <div class="spa-photo-card">
-                                <img src="{{ asset('/setting/banner/' . $project->image) }}" alt="{{ $project->header_title }}" loading="lazy">
-                                <div class="spa-photo-overlay">
-                                    <a href="{{ asset('/setting/banner/' . $project->image) }}" class="spa-image-popup text-white fs-3" title="{{ $project->header_title }}">
+                                <img src="{{ $itemImg }}" alt="{{ $itemTitle }}" loading="lazy">
+                                <div class="spa-photo-caption">
+                                    <h5>{{ $itemTitle }}</h5>
+                                </div>
+                                <div class="spa-photo-overlay text-center">
+                                    <a href="{{ $itemImg }}" class="spa-image-popup text-white fs-3 mb-2" title="{{ $itemTitle }}">
                                         <i class="fas fa-magnifying-glass-plus"></i>
                                     </a>
+                                    <h5 class="text-white fw-bold mb-1">{{ $itemTitle }}</h5>
+                                    <span class="small text-warning text-uppercase"><i class="fas fa-spa me-1"></i> Atmosphere & Suites</span>
                                 </div>
                             </div>
                         </div>
@@ -244,7 +612,7 @@
          6. Video Gallery Section
          ========================================================================= -->
     @if(isset($videos) && count($videos) > 0)
-        <section class="py-5" style="background: var(--spa-light-alt);">
+        <section class="py-5" style="background: var(--spa-light-alt);" id="video-gallery">
             <div class="container py-4">
                 <div class="spa-section-header">
                     <span class="spa-section-subtitle">Experience The Ritual</span>
@@ -255,12 +623,27 @@
                 <div class="row g-4 justify-content-center">
                     @foreach ($videos as $video)
                         <div class="col-lg-6 col-md-6">
-                            <div class="spa-video-wrapper">
-                                {!! $video->video_url !!}
+                            <div class="spa-video-card h-100 d-flex flex-column">
+                                <div class="spa-video-wrapper mb-3">
+                                    @php
+                                        $rawUrl = trim($video->video_url);
+                                        if (stripos($rawUrl, '<iframe') !== false) {
+                                            $embedHtml = $rawUrl;
+                                        } elseif (preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i', $rawUrl, $matches)) {
+                                            $embedHtml = '<iframe src="https://www.youtube.com/embed/' . $matches[1] . '" title="' . e(strip_tags($video->video_title)) . '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+                                        } else {
+                                            $embedHtml = '<iframe src="' . e($rawUrl) . '" title="' . e(strip_tags($video->video_title)) . '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+                                        }
+                                    @endphp
+                                    {!! $embedHtml !!}
+                                </div>
+                                @if($video->video_title)
+                                    <div class="spa-video-info text-center px-2">
+                                        <h4 class="fs-5 text-emerald fw-semibold mb-1">{{ strip_tags($video->video_title) }}</h4>
+                                        <span class="small text-muted"><i class="fas fa-play-circle text-warning me-1"></i> Watch Treatment Experience</span>
+                                    </div>
+                                @endif
                             </div>
-                            @if($video->video_title)
-                                <h4 class="text-center mt-2 fs-5 text-emerald">{{ $video->video_title }}</h4>
-                            @endif
                         </div>
                     @endforeach
                 </div>
@@ -344,11 +727,12 @@
                                         <label for="appointment-service" class="spa-form-label">Preferred Treatment *</label>
                                         <select name="appointment_service" id="appointment-service" class="spa-form-control" required>
                                             <option value="">Select a treatment</option>
-                                            @if(isset($services))
-                                                @foreach ($services as $service)
-                                                    <option value="{{ $service->id }}">{{ $service->title }}</option>
-                                                @endforeach
-                                            @endif
+                                            @php
+                                                $bookingServices = (isset($services_all) && $services_all->count() > 0) ? $services_all : (isset($services) ? $services : collect());
+                                            @endphp
+                                            @foreach ($bookingServices as $service)
+                                                <option value="{{ $service->id }}">{{ $service->title }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
