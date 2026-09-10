@@ -14,18 +14,64 @@
                     </a>
                 </div>
                 <p class="mb-4 text-white opacity-90">{{ get_setting('footer_description') ?? 'Indulge in pure bliss and rejuvenating wellness treatments designed to revitalize your body and mind in luxury.' }}</p>
+                @php
+                    $telegram_raw = get_setting('linkedin') ?? '';
+                    $telegram = trim($telegram_raw);
+                    if ($telegram) {
+                        if (preg_match('/^https?:\/\//i', $telegram)) {
+                            $telegram_link = $telegram;
+                        } else {
+                            $telegram_link = 'https://t.me/' . ltrim($telegram, '@');
+                        }
+                    } else {
+                        $telegram_link = null;
+                    }
+
+                    // Build WhatsApp link from admin `twitter` setting (now used for WhatsApp)
+                    $wa_raw = get_setting('twitter') ?? '';
+                    $wa = trim($wa_raw);
+                    if ($wa) {
+                        if (preg_match('/^https?:\/\//i', $wa)) {
+                            $wa_link = $wa;
+                        } else {
+                            $wa_digits = preg_replace('/[^0-9]/', '', $wa);
+                            if ($wa_digits) {
+                                $wa_link = 'https://api.whatsapp.com/send?phone=' . $wa_digits;
+                            } else {
+                                $wa_link = 'https://wa.me/' . ltrim($wa, '@');
+                            }
+                        }
+                    } else {
+                        $wa_link = null;
+                    }
+
+                    // Normalize office phone for fallback and build default WhatsApp chat URL
+                    $raw_phone = preg_replace('/[^0-9]/', '', get_setting('office_phone') ?? '8801736010400');
+                    if (substr($raw_phone, 0, 2) !== '88' && strlen($raw_phone) == 11) {
+                        $raw_phone = '88' . $raw_phone;
+                    }
+                    $default_wa = 'https://api.whatsapp.com/send?phone=' . $raw_phone;
+
+                    // Compose final WhatsApp URL with message
+                    $message = urlencode('Hello! I would like to book a spa treatment.');
+                    if ($wa_link) {
+                        $wa_link_with_msg = $wa_link . (strpos($wa_link, '?') !== false ? '&text=' : '?text=') . $message;
+                    } else {
+                        $wa_link_with_msg = $default_wa . '&text=' . $message;
+                    }
+                @endphp
                 <div class="spa-topbar-social">
                     @if(get_setting('facebook'))
                         <a href="{{ get_setting('facebook') }}" target="_blank"><i class="fab fa-facebook-f"></i></a>
                     @endif
-                    @if(get_setting('twitter'))
-                        <a href="{{ get_setting('twitter') }}" target="_blank"><i class="fab fa-x-twitter"></i></a>
+                    @if($wa_link)
+                        <a href="{{ $wa_link }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i></a>
                     @endif
                     @if(get_setting('instagram'))
                         <a href="{{ get_setting('instagram') }}" target="_blank"><i class="fab fa-instagram"></i></a>
                     @endif
-                    @if(get_setting('linkedin'))
-                        <a href="{{ get_setting('linkedin') }}" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    @if($telegram_link)
+                        <a href="{{ $telegram_link }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram-plane"></i></a>
                     @endif
                     @if(get_setting('youtube'))
                         <a href="{{ get_setting('youtube') }}" target="_blank"><i class="fab fa-youtube"></i></a>
@@ -99,13 +145,7 @@
 
 <!-- Desktop Floating Action Buttons -->
 <div class="spa-fab-group">
-    @php
-        $raw_phone = preg_replace('/[^0-9]/', '', get_setting('office_phone') ?? '8801736010400');
-        if (substr($raw_phone, 0, 2) !== '88' && strlen($raw_phone) == 11) {
-            $raw_phone = '88' . $raw_phone;
-        }
-    @endphp
-    <a href="https://api.whatsapp.com/send?phone={{ $raw_phone }}&text=Hello!%20I%20would%20like%20to%20book%20a%20spa%20treatment." target="_blank" class="spa-fab-btn spa-fab-whatsapp" aria-label="WhatsApp Us" title="Chat on WhatsApp">
+    <a href="{{ $wa_link_with_msg }}" target="_blank" class="spa-fab-btn spa-fab-whatsapp" aria-label="WhatsApp Us" title="Chat on WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>
     <a href="tel:{{ get_setting('office_phone') }}" class="spa-fab-btn spa-fab-phone" aria-label="Call Us" title="Call Us Now">
@@ -119,11 +159,11 @@
         <a href="tel:{{ get_setting('office_phone') }}" class="spa-dock-btn spa-dock-call">
             <i class="fas fa-phone-alt"></i> Call Now
         </a>
-        <a href="https://api.whatsapp.com/send?phone={{ $raw_phone }}&text=Hello!%20I%20would%20like%20to%20book%20a%20spa%20treatment." target="_blank" class="spa-dock-btn spa-dock-whatsapp">
+        <a href="{{ $wa_link_with_msg }}" target="_blank" class="spa-dock-btn spa-dock-whatsapp">
             <i class="fab fa-whatsapp"></i> WhatsApp
         </a>
-        <a href="{{ url('/') }}#appointment" class="spa-dock-btn spa-dock-book">
-            <i class="fas fa-calendar-check"></i> Book
+        <a href="{{ $telegram_link ?: '#' }}" target="_blank" rel="noopener noreferrer" class="spa-dock-btn spa-dock-book spa-dock-telegram" aria-label="Telegram" title="Telegram">
+            <i class="fab fa-telegram-plane"></i> Telegram
         </a>
     </div>
 </div>
