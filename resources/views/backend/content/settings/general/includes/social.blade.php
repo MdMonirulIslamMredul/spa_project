@@ -11,15 +11,15 @@
       </div> <!-- col-->
     </div> <!-- form-group-->
     <div class="form-group row mb-4">
-      {{html()->label('Twitter')->class('col-md-4 col-form-label text-right')->for('twitter')}}
+      {{html()->label('WhatsApp')->class('col-md-4 col-form-label text-right')->for('twitter')}}
       <div class="col-md-8">
-        {{html()->text('twitter', get_setting('twitter'))->class('form-control')->placeholder('twitter')}}
+        {{html()->text('twitter', get_setting('twitter'))->class('form-control')->placeholder('whatsapp')}}
       </div> <!-- col-->
     </div> <!-- form-group-->
     <div class="form-group row mb-4">
-      {{html()->label('LinkedIn')->class('col-md-4 col-form-label text-right')->for('linkedin')}}
+      {{html()->label('Telegram')->class('col-md-4 col-form-label text-right')->for('linkedin')}}
       <div class="col-md-8">
-        {{html()->text('linkedin', get_setting('linkedin'))->class('form-control')->placeholder('linkedin')}}
+        {{html()->text('linkedin', get_setting('linkedin'))->class('form-control')->placeholder('telegram')}}
       </div> <!-- col-->
     </div> <!-- form-group-->
     <div class="form-group row mb-4">
