@@ -236,6 +236,21 @@
                             <input type="text" name="service_title" value="{{ $notice->service_title ?? $notice->title ?? '' }}" class="form-control" placeholder="Service Title">
                         </div>
 
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Price (TK)</label>
+                                    <input type="text" name="price" value="{{ $notice->price ?? '' }}" class="form-control" placeholder="Price (TK)">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Price ($ / Dollar)</label>
+                                    <input type="text" name="price_dollar" value="{{ $notice->price_dollar ?? '' }}" class="form-control" placeholder="Price ($ / Dollar)">
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label>Service Details</label>
                             <textarea name="service_details" rows="4" class="form-control" placeholder="Service Details">{{ $notice->service_details ?? '' }}</textarea>

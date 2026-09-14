@@ -182,6 +182,20 @@ $multis = DB::table('services')
                         <label>Service Title</label>
                         <input type="text" class="form-control" rows="5" name="service_title[]" id="service_title" placeholder="Service Title">
                     </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Price (TK)</label>
+                                <input type="text" class="form-control" name="price[]" id="price" placeholder="Price (TK)">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Price ($ / Dollar)</label>
+                                <input type="text" class="form-control" name="price_dollar[]" id="price_dollar" placeholder="Price ($ / Dollar)">
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label>Service Details</label>
                         <textarea type="text" class="form-control" rows="3" name="service_details[]" id="service_details" placeholder="Service Details"></textarea>
@@ -217,6 +231,8 @@ $multis = DB::table('services')
                         <th>Banner Image</th>
                         <th>Images</th>
                         <th>Title</th>
+                        <th>Price (TK)</th>
+                        <th>Price ($)</th>
                         <th>Details</th>
                         <th>Active/Deactive</th>
                         <th>Action</th>
@@ -253,6 +269,8 @@ $multis = DB::table('services')
                             </div>
                         </td>
                         <td>{{ $multi->service_title ?? null }}</td>
+                        <td>{{ $multi->price ?? '-' }}</td>
+                        <td>{{ $multi->price_dollar ?? '-' }}</td>
                         <td>{{ $multi->service_details ?? null }}</td>
 
                         <td>
