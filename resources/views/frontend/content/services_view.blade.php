@@ -75,9 +75,16 @@
 
                             <!-- Meta Attributes Bar -->
                             <div class="spa-service-meta-bar">
-                                @if($service->price)
+                                @if($service->price || $service->price_dollar)
                                     <div class="spa-price-badge-lg">
-                                        ৳{{ $service->price }} <span>Starting</span>
+                                        @if($service->price && $service->price_dollar)
+                                            ৳{{ $service->price }} <span class="mx-1 opacity-75" style="font-size: 0.9em; font-weight: normal;">/</span> ${{ $service->price_dollar }}
+                                        @elseif($service->price)
+                                            ৳{{ $service->price }}
+                                        @else
+                                            ${{ $service->price_dollar }}
+                                        @endif
+                                        <span class="ms-1">Starting</span>
                                     </div>
                                 @endif
                                 <div class="spa-meta-item">
@@ -244,8 +251,18 @@
                         <div class="p-4 rounded-4 text-white mb-4 shadow-md spa-sidebar-card" style="background: var(--spa-primary-dark); border: 1px solid var(--spa-border-gold);">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <span class="badge bg-warning text-dark px-3 py-1">Instant Reservation</span>
-                                @if($service && $service->price)
-                                    <div class="fs-4 fw-bold text-warning">৳{{ $service->price }}</div>
+                                @if($service && ($service->price || $service->price_dollar))
+                                    <div class="fs-4 fw-bold text-warning d-flex align-items-baseline gap-1">
+                                        @if($service->price && $service->price_dollar)
+                                            <span>৳{{ $service->price }}</span>
+                                            <span class="fs-6 text-light opacity-75 fw-normal">/</span>
+                                            <span class="text-white">${{ $service->price_dollar }}</span>
+                                        @elseif($service->price)
+                                            <span>৳{{ $service->price }}</span>
+                                        @else
+                                            <span class="text-white">${{ $service->price_dollar }}</span>
+                                        @endif
+                                    </div>
                                 @endif
                             </div>
                             <h3 class="spa-heading fs-4 text-white mb-2">Reserve Your Session</h3>
@@ -282,8 +299,16 @@
                                                 @endif
                                                 <div class="spa-sidebar-service-info">
                                                     <h6>{{ $other_service->title }}</h6>
-                                                    @if($other_service->price)
-                                                        <span class="price-tag">৳{{ $other_service->price }}</span>
+                                                    @if($other_service->price || $other_service->price_dollar)
+                                                        <span class="price-tag">
+                                                            @if($other_service->price && $other_service->price_dollar)
+                                                                ৳{{ $other_service->price }} / ${{ $other_service->price_dollar }}
+                                                            @elseif($other_service->price)
+                                                                ৳{{ $other_service->price }}
+                                                            @else
+                                                                ${{ $other_service->price_dollar }}
+                                                            @endif
+                                                        </span>
                                                     @endif
                                                 </div>
                                                 <i class="fas fa-chevron-right text-muted small ms-auto"></i>

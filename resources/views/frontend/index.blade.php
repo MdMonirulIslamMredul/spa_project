@@ -212,11 +212,22 @@
                 letter-spacing: 0.05em !important;
             }
             #packages .spa-package-price-val {
-                font-size: 1.65rem !important;
+                font-size: 1.55rem !important;
                 font-weight: 800 !important;
                 color: #F8E8B8 !important;
                 font-family: 'Playfair Display', Georgia, serif !important;
                 line-height: 1.2 !important;
+                display: flex !important;
+                flex-wrap: wrap !important;
+                align-items: baseline !important;
+                gap: 6px !important;
+            }
+            #packages .spa-package-usd-range {
+                font-size: 1.15rem !important;
+                font-weight: 600 !important;
+                color: #FFFFFF !important;
+                opacity: 0.9 !important;
+                font-family: 'Playfair Display', Georgia, serif !important;
             }
             #packages .spa-package-durations {
                 margin-bottom: 1.25rem !important;
@@ -234,14 +245,14 @@
             }
             #packages .spa-durations-list {
                 display: grid !important;
-                grid-template-columns: repeat(3, 1fr) !important;
+                grid-template-columns: repeat(2, 1fr) !important;
                 gap: 8px !important;
             }
             #packages .spa-duration-pill {
                 background: rgba(255, 255, 255, 0.08) !important;
                 border: 1px solid rgba(212, 175, 55, 0.3) !important;
                 border-radius: 8px !important;
-                padding: 6px 4px !important;
+                padding: 7px 6px !important;
                 text-align: center !important;
                 transition: all 0.25s ease !important;
             }
@@ -251,16 +262,23 @@
             }
             #packages .spa-duration-time {
                 display: block !important;
-                font-size: 0.73rem !important;
+                font-size: 0.74rem !important;
                 color: #FFFFFF !important;
                 font-weight: 600 !important;
                 margin-bottom: 2px !important;
             }
             #packages .spa-duration-cost {
                 display: block !important;
-                font-size: 0.92rem !important;
+                font-size: 0.88rem !important;
                 font-weight: 800 !important;
                 color: #F8E8B8 !important;
+                white-space: nowrap !important;
+            }
+            #packages .spa-duration-usd {
+                font-size: 0.82rem !important;
+                font-weight: 600 !important;
+                color: #FFFFFF !important;
+                opacity: 0.9 !important;
             }
             #packages .spa-package-perks {
                 list-style: none !important;
@@ -340,35 +358,45 @@
                     <span class="spa-section-subtitle">Affordable Luxury & Transparency</span>
                     <h2 class="spa-section-title text-white">Wellness & Treatment Packages</h2>
                     <p class="spa-section-desc">
-                        Explore our all-inclusive therapy packages with flexible session durations and transparent pricing. Every session is conducted in a private luxury suite with organic aromatherapy.
+                        Explore our all-inclusive therapy packages with flexible session durations and transparent pricing in both BDT (৳) and USD ($). Every session is conducted in a private luxury suite with organic aromatherapy.
                     </p>
                 </div>
 
                 <div class="row g-4 justify-content-center">
                     @foreach ($package_items as $service_pkg)
                         @php
-                            $detailsText = $service_pkg->service_details ?? '';
-                            preg_match_all('/(\d+\s*Minutes?)\s*[\—\–\-–\:]\s*([0-9,]+)\s*(?:TK|Tk|৳)?/iu', $detailsText, $matches, PREG_SET_ORDER);
-                            $priceTiers = [];
-                            $prices = [];
-                            foreach ($matches as $m) {
-                                $dur = trim($m[1]);
-                                $val = trim($m[2]);
-                                $numericVal = (int) str_replace(',', '', $val);
-                                $priceTiers[] = [
-                                    'duration' => $dur,
-                                    'price' => $val,
-                                    'amount' => $numericVal
-                                ];
-                                $prices[] = $numericVal;
-                            }
+                            $priceTiers = $service_pkg->price_tiers ?? [];
+                            $bdtPrices = array_filter(array_column($priceTiers, 'bdt'));
+                            $usdPrices = array_filter(array_column($priceTiers, 'usd'));
+
+                            $minPrice = !empty($bdtPrices) ? min($bdtPrices) : (int) str_replace(',', '', $service_pkg->price ?? '0');
+                            $maxPrice = !empty($bdtPrices) ? max($bdtPrices) : $minPrice;
                             
-                            $minPrice = !empty($prices) ? min($prices) : ($service_pkg->price ?? 0);
-                            $maxPrice = !empty($prices) ? max($prices) : ($service_pkg->price ?? 0);
-                            $priceRangeFormatted = ($minPrice == $maxPrice || empty($prices)) 
-                                ? '৳' . number_format($minPrice) 
+                            $priceRangeFormatted = ($minPrice == $maxPrice || empty($minPrice)) 
+                                ? ($minPrice ? '৳' . number_format($minPrice) : '')
                                 : '৳' . number_format($minPrice) . ' – ৳' . number_format($maxPrice);
-                                
+
+                            $minUsd = !empty($usdPrices) ? min($usdPrices) : null;
+                            $maxUsd = !empty($usdPrices) ? max($usdPrices) : null;
+
+                            $usdRangeFormatted = '';
+                            if ($minUsd && $maxUsd) {
+                                $usdRangeFormatted = ($minUsd == $maxUsd) ? '$' . $minUsd : '$' . $minUsd . ' – $' . $maxUsd;
+                            }
+
+                            // Dynamic duration range tag
+                            $durations = array_filter(array_column($priceTiers, 'duration'));
+                            $durationTag = '30 - 120 Mins';
+                            if (!empty($durations)) {
+                                preg_match_all('/\d+/', implode(' ', $durations), $dMatches);
+                                if (!empty($dMatches[0])) {
+                                    $minDur = min($dMatches[0]);
+                                    $maxDur = max($dMatches[0]);
+                                    $durationTag = ($minDur == $maxDur) ? "{$minDur} Mins" : "{$minDur} - {$maxDur} Mins";
+                                }
+                            }
+
+                            $detailsText = $service_pkg->service_details ?? '';
                             $cleanDesc = $service_pkg->description;
                             if (empty($cleanDesc) && !empty($detailsText)) {
                                 $parts = preg_split('/Pricing\s*&\s*Duration/iu', $detailsText);
@@ -388,7 +416,7 @@
                                     <img src="{{ $pkgImg }}" alt="{{ $pkgTitle }}" class="spa-package-img" loading="lazy">
                                     <div class="spa-package-img-overlay"></div>
                                     <span class="spa-package-badge"><i class="fas fa-crown text-warning me-1"></i> Signature Package</span>
-                                    <span class="spa-package-duration-tag"><i class="far fa-clock me-1"></i> 60 - 120 Mins</span>
+                                    <span class="spa-package-duration-tag"><i class="far fa-clock me-1"></i> {{ $durationTag }}</span>
                                 </div>
 
                                 <!-- Package Body Content -->
@@ -400,10 +428,13 @@
                                     <div class="spa-package-price-box">
                                         <div class="spa-package-price-box-header">
                                             <span class="spa-package-price-label">Price Range</span>
-                                            <span class="spa-package-price-badge">All Inclusive</span>
+                                            <span class="spa-package-price-badge">BDT & USD</span>
                                         </div>
                                         <div class="spa-package-price-val">
-                                            {{ $priceRangeFormatted }}
+                                            <span>{{ $priceRangeFormatted }}</span>
+                                            @if(!empty($usdRangeFormatted))
+                                                <span class="spa-package-usd-range">/ {{ $usdRangeFormatted }}</span>
+                                            @endif
                                         </div>
                                     </div>
 
@@ -411,13 +442,18 @@
                                     @if(count($priceTiers) > 0)
                                         <div class="spa-package-durations">
                                             <div class="spa-durations-title">
-                                                <i class="fas fa-stopwatch text-warning"></i> Available Session Durations:
+                                                <i class="fas fa-stopwatch text-warning"></i> Available Session Durations & Pricing:
                                             </div>
                                             <div class="spa-durations-list">
                                                 @foreach($priceTiers as $tier)
                                                     <div class="spa-duration-pill">
                                                         <span class="spa-duration-time">{{ $tier['duration'] }}</span>
-                                                        <span class="spa-duration-cost">৳{{ $tier['price'] }}</span>
+                                                        <span class="spa-duration-cost">
+                                                            ৳{{ number_format($tier['bdt']) }}
+                                                            @if(!empty($tier['usd']))
+                                                                <span class="spa-duration-usd">/ ${{ $tier['usd'] }}</span>
+                                                            @endif
+                                                        </span>
                                                     </div>
                                                 @endforeach
                                             </div>
@@ -472,7 +508,13 @@
                             <div class="spa-service-card">
                                 <div class="spa-service-img-wrap">
                                     <img src="{{ asset('/setting/banner/' . $service->service_image) }}" alt="{{ $service->title }}" loading="lazy">
-                                    <span class="spa-service-badge">Premium Treatment</span>
+                                    <span class="spa-service-badge">
+                                        @if($service->price || $service->price_dollar)
+                                            From {{ $service->price ? '৳' . $service->price : '' }}{{ ($service->price && $service->price_dollar) ? ' / ' : '' }}{{ $service->price_dollar ? '$' . $service->price_dollar : '' }}
+                                        @else
+                                            Premium Treatment
+                                        @endif
+                                    </span>
                                 </div>
                                 <div class="spa-service-body">
                                     <h3 class="spa-service-title">{{ $service->title }}</h3>

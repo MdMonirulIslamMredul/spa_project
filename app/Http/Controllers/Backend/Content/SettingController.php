@@ -804,8 +804,6 @@ class SettingController extends Controller
       $slider->ban_img = $file_name ?? null;
       $slider->ban_title = $request->ban_title ?? null;
       $slider->title = $request->title[$key] ?? null;
-      $slider->price = $request->price[$key] ?? null;
-      $slider->price_dollar = $request->price_dollar[$key] ?? null;
       $slider->description = $request->description[$key] ?? null;
       $slider->service_title = $request->service_title[$key] ?? null;
       $slider->service_details = $request->service_details[$key] ?? null;
@@ -819,7 +817,7 @@ class SettingController extends Controller
 
   public function serviceedit($id)
   {
-    $notice = DB::table('services')->find($id);
+    $notice = Service::find($id);
     return view('backend.content.settings.service.edit', compact('notice'));
   }
 
@@ -882,8 +880,6 @@ class SettingController extends Controller
         $slider->ban_img = $file_name;
       }
       $slider->title = $request->title ?? $slider->title;
-      $slider->price = $request->price ?? $slider->price;
-      $slider->price_dollar = $request->price_dollar ?? $slider->price_dollar;
       $slider->description = $request->description ?? $slider->description;
       $slider->service_image = $newImageName;
       $slider->service_image_2 = $newImageName2;

@@ -236,24 +236,19 @@
                             <input type="text" name="service_title" value="{{ $notice->service_title ?? $notice->title ?? '' }}" class="form-control" placeholder="Service Title">
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Price (TK)</label>
-                                    <input type="text" name="price" value="{{ $notice->price ?? '' }}" class="form-control" placeholder="Price (TK)">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Price ($ / Dollar)</label>
-                                    <input type="text" name="price_dollar" value="{{ $notice->price_dollar ?? '' }}" class="form-control" placeholder="Price ($ / Dollar)">
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="form-group">
                             <label>Service Details</label>
-                            <textarea name="service_details" rows="4" class="form-control" placeholder="Service Details">{{ $notice->service_details ?? '' }}</textarea>
+                            <textarea name="service_details" rows="6" class="form-control" placeholder="Enter service description, pricing & duration tiers (e.g. 30 Minutes — 3,500 TK or $30)">{{ $notice->service_details ?? '' }}</textarea>
+                            <div class="d-flex justify-content-between align-items-center mt-1">
+                                <small class="form-text text-muted">
+                                    <i class="fas fa-info-circle text-info"></i> Starting prices are automatically extracted from your duration & pricing text (e.g., <code>• 30 Minutes — 3,500 TK or $30</code>).
+                                </small>
+                                @if(!empty($notice->price) || !empty($notice->price_dollar))
+                                    <small class="text-success font-weight-bold">
+                                        Detected Starting: {{ $notice->price ? '৳' . $notice->price : '' }}{{ ($notice->price && $notice->price_dollar) ? ' / ' : '' }}{{ $notice->price_dollar ? '$' . $notice->price_dollar : '' }}
+                                    </small>
+                                @endif
+                            </div>
                         </div>
 
                         <div class="form-group">

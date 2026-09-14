@@ -117,10 +117,7 @@ $demoImg = 'img/backend/front-logo.png';
 
 </style>
 @php
-$multis = DB::table('services')
-->where('is_active', 1)
-->orwhere('is_active', 0)
-->get();
+$multis = \App\Models\Service::orderBy('id', 'ASC')->get();
 @endphp
 <div class="row">
     <div class="col-lg-12">
@@ -182,23 +179,12 @@ $multis = DB::table('services')
                         <label>Service Title</label>
                         <input type="text" class="form-control" rows="5" name="service_title[]" id="service_title" placeholder="Service Title">
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Price (TK)</label>
-                                <input type="text" class="form-control" name="price[]" id="price" placeholder="Price (TK)">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Price ($ / Dollar)</label>
-                                <input type="text" class="form-control" name="price_dollar[]" id="price_dollar" placeholder="Price ($ / Dollar)">
-                            </div>
-                        </div>
-                    </div>
                     <div class="form-group">
                         <label>Service Details</label>
-                        <textarea type="text" class="form-control" rows="3" name="service_details[]" id="service_details" placeholder="Service Details"></textarea>
+                        <textarea class="form-control" rows="5" name="service_details[]" id="service_details" placeholder="Enter service description, pricing & duration tiers (e.g. 30 Minutes — 3,500 TK or $30)"></textarea>
+                        <small class="form-text text-muted">
+                            <i class="fas fa-info-circle text-info"></i> Starting prices in BDT and USD are automatically extracted from your duration & pricing text (e.g., <code>• 30 Minutes — 3,500 TK or $30</code>).
+                        </small>
                     </div>
                     <div class="form-group">
                         <label>Add to Homepage</label>
@@ -231,8 +217,8 @@ $multis = DB::table('services')
                         <th>Banner Image</th>
                         <th>Images</th>
                         <th>Title</th>
-                        <th>Price (TK)</th>
-                        <th>Price ($)</th>
+                        <th>Starting (TK)</th>
+                        <th>Starting ($)</th>
                         <th>Details</th>
                         <th>Active/Deactive</th>
                         <th>Action</th>
@@ -269,8 +255,8 @@ $multis = DB::table('services')
                             </div>
                         </td>
                         <td>{{ $multi->service_title ?? null }}</td>
-                        <td>{{ $multi->price ?? '-' }}</td>
-                        <td>{{ $multi->price_dollar ?? '-' }}</td>
+                        <td><span class="badge badge-success" style="font-size: 0.9em;">{{ $multi->price ? '৳' . $multi->price : '-' }}</span></td>
+                        <td><span class="badge badge-info" style="font-size: 0.9em;">{{ $multi->price_dollar ? '$' . $multi->price_dollar : '-' }}</span></td>
                         <td>{{ $multi->service_details ?? null }}</td>
 
                         <td>
