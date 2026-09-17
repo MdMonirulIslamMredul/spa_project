@@ -23,9 +23,9 @@
       </div> <!-- col-->
     </div> <!-- form-group-->
     <div class="form-group row mb-4">
-      {{html()->label('YouTube')->class('col-md-4 col-form-label text-right')->for('youtube')}}
-      <div class="col-md-8">
-        {{html()->text('youtube', get_setting('youtube'))->class('form-control')->placeholder('youtube')}}
+      {{html()->label('Telegram Channel')->class('col-md-4 col-form-label text-right')->for('youtube')}}
+      <div class="col-md-8"> 
+        {{html()->text('youtube', get_setting('youtube'))->class('form-control')->placeholder('telegram Channel')}}
       </div> <!-- col-->
     </div> <!-- form-group-->
     <div class="form-group row mb-4">
