@@ -1993,6 +1993,7 @@ select.spa-form-control {
   box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.25);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
+  overflow: visible;
 }
 
 .spa-dock-container {
@@ -2002,6 +2003,7 @@ select.spa-form-control {
   gap: 12px;
   max-width: 450px;
   margin: 0 auto;
+  position: relative;
 }
 
 .spa-dock-btn {
@@ -2035,15 +2037,120 @@ select.spa-form-control {
   font-weight: 700;
 }
 
+.spa-dock-slot {
+  flex: 1;
+  position: relative;
+  display: flex;
+}
+
+.spa-dock-slot .spa-dock-btn {
+  width: 100%;
+}
+
+/* Floating Telegram Channel Button (positioned directly above Telegram button) */
+.spa-dock-floating-channel {
+  position: absolute;
+  bottom: calc(100% + 14px);
+  right: 50%;
+  transform: translateX(50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none !important;
+  z-index: 1040;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.spa-dock-floating-channel:hover,
+.spa-dock-floating-channel:focus {
+  transform: translateX(50%) translateY(-3px) scale(1.06);
+}
+
+.spa-float-channel-btn {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2AABEE 0%, #229ED9 50%, #0088cc 100%);
+  color: #ffffff !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  box-shadow: 0 6px 20px rgba(34, 158, 217, 0.45), 0 2px 6px rgba(0, 0, 0, 0.25);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  transition: box-shadow 0.25s ease;
+}
+
+.spa-dock-floating-channel:hover .spa-float-channel-btn {
+  box-shadow: 0 8px 25px rgba(34, 158, 217, 0.7), 0 0 16px rgba(255, 255, 255, 0.45);
+}
+
+.spa-float-channel-pulse {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 50%;
+  border: 2px solid rgba(42, 171, 238, 0.85);
+  animation: spaChannelPulse 2s infinite cubic-bezier(0.45, 0, 0.55, 1);
+  pointer-events: none;
+}
+
+@keyframes spaChannelPulse {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.9;
+  }
+  70% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+.spa-float-channel-badge {
+  background: linear-gradient(135deg, #E5C378 0%, #D4AF37 50%, #B8860B 100%);
+  color: #0F3E36 !important;
+  font-size: 9.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 7px;
+  border-radius: 20px;
+  margin-top: -6px;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.2;
+}
+
 /* Desktop Floating Action Buttons */
 .spa-fab-group {
   position: fixed;
   bottom: 28px;
-  right: 28px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
   z-index: 999;
+}
+
+.spa-fab-group-right {
+  right: 28px;
+  left: auto;
+}
+
+.spa-fab-group-left {
+  left: 28px;
+  right: auto;
 }
 
 .spa-fab-btn {
@@ -2055,13 +2162,26 @@ select.spa-form-control {
   justify-content: center;
   color: var(--spa-white) !important;
   font-size: 1.35rem;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  transition: var(--spa-transition);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.22);
+  transition: all 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   border: none;
+  position: relative;
+  text-decoration: none !important;
 }
 
 .spa-fab-btn:hover {
   transform: scale(1.1) translateY(-3px);
+}
+
+.spa-fab-telegram {
+  background: linear-gradient(135deg, #2AABEE 0%, #229ED9 100%);
+  box-shadow: 0 8px 25px rgba(34, 158, 217, 0.45);
+}
+
+.spa-fab-telegram-channel {
+  background: linear-gradient(135deg, #0088cc 0%, #006fa6 100%);
+  box-shadow: 0 8px 25px rgba(0, 136, 204, 0.5);
+  border: 1.5px solid rgba(212, 175, 55, 0.6);
 }
 
 .spa-fab-whatsapp {
@@ -2072,6 +2192,77 @@ select.spa-form-control {
 .spa-fab-phone {
   background: #2490EB;
   box-shadow: 0 8px 25px rgba(36, 144, 235, 0.4);
+}
+
+.spa-fab-pulse {
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border-radius: 50%;
+  border: 2px solid rgba(42, 171, 238, 0.7);
+  animation: spaChannelPulse 2.2s infinite cubic-bezier(0.45, 0, 0.55, 1);
+  pointer-events: none;
+}
+
+.spa-fab-badge {
+  position: absolute;
+  bottom: -4px;
+  background: linear-gradient(135deg, #E5C378 0%, #D4AF37 50%, #B8860B 100%);
+  color: #0F3E36 !important;
+  font-size: 8.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 1px 5px;
+  border-radius: 10px;
+  line-height: 1.2;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* Tooltips */
+.spa-fab-tooltip {
+  position: absolute;
+  top: 50%;
+  background: rgba(15, 62, 54, 0.96);
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--spa-border-gold);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: all 0.25s ease;
+}
+
+.spa-fab-group-left .spa-fab-tooltip {
+  left: calc(100% + 12px);
+  transform: translateY(-50%) translateX(-8px);
+}
+
+.spa-fab-group-left .spa-fab-btn:hover .spa-fab-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) translateX(0);
+}
+
+.spa-fab-group-right .spa-fab-tooltip {
+  right: calc(100% + 12px);
+  transform: translateY(-50%) translateX(8px);
+}
+
+.spa-fab-group-right .spa-fab-btn:hover .spa-fab-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) translateX(0);
 }
 
 /* ==========================================================================
