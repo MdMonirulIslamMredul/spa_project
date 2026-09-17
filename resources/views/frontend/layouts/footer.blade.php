@@ -27,6 +27,19 @@
                         $telegram_link = null;
                     }
 
+                    // Telegram Channel link from admin `youtube` setting (used for Telegram Channel)
+                    $tg_channel_raw = get_setting('youtube') ?? '';
+                    $tg_channel = trim($tg_channel_raw);
+                    if ($tg_channel) {
+                        if (preg_match('/^https?:\/\//i', $tg_channel)) {
+                            $telegram_channel_link = $tg_channel;
+                        } else {
+                            $telegram_channel_link = 'https://t.me/' . ltrim($tg_channel, '@');
+                        }
+                    } else {
+                        $telegram_channel_link = null;
+                    }
+
                     // Build WhatsApp link from admin `twitter` setting (now used for WhatsApp)
                     $wa_raw = get_setting('twitter') ?? '';
                     $wa = trim($wa_raw);
@@ -73,8 +86,10 @@
                     @if($telegram_link)
                         <a href="{{ $telegram_link }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram-plane"></i></a>
                     @endif
-                    @if(get_setting('youtube'))
-                        <a href="{{ get_setting('youtube') }}" target="_blank"><i class="fab fa-youtube"></i></a>
+                    @if($telegram_channel_link)
+                        <a href="{{ $telegram_channel_link }}" target="_blank" rel="noopener noreferrer" title="Telegram Channel" aria-label="Telegram Channel">
+                            <i class="{{ (str_contains($telegram_channel_link, 't.me') || str_contains($telegram_channel_link, 'telegram')) ? 'fab fa-telegram-plane' : 'fab fa-youtube' }}"></i>
+                        </a>
                     @endif
                 </div>
             </div>
@@ -143,13 +158,33 @@
     </div>
 </footer>
 
-<!-- Desktop Floating Action Buttons -->
-<div class="spa-fab-group">
+<!-- Desktop Floating Action Buttons - Left (Telegram & Telegram Channel) -->
+<div class="spa-fab-group spa-fab-group-left">
+    @if($telegram_link)
+        <a href="{{ $telegram_link }}" target="_blank" rel="noopener noreferrer" class="spa-fab-btn spa-fab-telegram" aria-label="Telegram Chat" title="Chat on Telegram">
+            <i class="fab fa-telegram-plane"></i>
+            <span class="spa-fab-tooltip">Chat on Telegram</span>
+        </a>
+    @endif
+    @if($telegram_channel_link)
+        <a href="{{ $telegram_channel_link }}" target="_blank" rel="noopener noreferrer" class="spa-fab-btn spa-fab-telegram-channel" aria-label="Telegram Channel" title="Join Telegram Channel">
+            <span class="spa-fab-pulse"></span>
+            <i class="fab fa-telegram-plane"></i>
+            <span class="spa-fab-badge">Channel</span>
+            <span class="spa-fab-tooltip">Telegram Channel</span>
+        </a>
+    @endif
+</div>
+
+<!-- Desktop Floating Action Buttons - Right (WhatsApp & Phone) -->
+<div class="spa-fab-group spa-fab-group-right">
     <a href="{{ $wa_link_with_msg }}" target="_blank" class="spa-fab-btn spa-fab-whatsapp" aria-label="WhatsApp Us" title="Chat on WhatsApp">
         <i class="fab fa-whatsapp"></i>
+        <span class="spa-fab-tooltip">WhatsApp</span>
     </a>
     <a href="tel:{{ get_setting('office_phone') }}" class="spa-fab-btn spa-fab-phone" aria-label="Call Us" title="Call Us Now">
         <i class="fas fa-phone-alt"></i>
+        <span class="spa-fab-tooltip">Call Us</span>
     </a>
 </div>
 
@@ -162,8 +197,19 @@
         <a href="{{ $wa_link_with_msg }}" target="_blank" class="spa-dock-btn spa-dock-whatsapp">
             <i class="fab fa-whatsapp"></i> WhatsApp
         </a>
-        <a href="{{ $telegram_link ?: '#' }}" target="_blank" rel="noopener noreferrer" class="spa-dock-btn spa-dock-book spa-dock-telegram" aria-label="Telegram" title="Telegram">
-            <i class="fab fa-telegram-plane"></i> Telegram
-        </a>
+        <div class="spa-dock-slot spa-dock-slot-tg">
+            @if($telegram_channel_link)
+                <a href="{{ $telegram_channel_link }}" target="_blank" rel="noopener noreferrer" class="spa-dock-floating-channel" aria-label="Telegram Channel" title="Join Telegram Channel">
+                    <div class="spa-float-channel-btn">
+                        <span class="spa-float-channel-pulse"></span>
+                        <i class="fab fa-telegram-plane"></i>
+                    </div>
+                    <span class="spa-float-channel-badge"><i class="fas fa-bullhorn me-1"></i>Channel</span>
+                </a>
+            @endif
+            <a href="{{ $telegram_link ?: '#' }}" target="_blank" rel="noopener noreferrer" class="spa-dock-btn spa-dock-book spa-dock-telegram" aria-label="Telegram" title="Telegram">
+                <i class="fab fa-telegram-plane"></i> Telegram
+            </a>
+        </div>
     </div>
 </div>
